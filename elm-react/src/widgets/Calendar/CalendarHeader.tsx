@@ -1,27 +1,13 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { DateManager } from "../../components/DateManager";
+import {
+  CalendarView,
+  useCalendarData,
+} from "../../providers/CalendarProvider";
 
-type CalendarHeaderProps = {
-  view: "month" | "consecutive";
-  setView: React.Dispatch<React.SetStateAction<"month" | "consecutive">>;
-  date: DateManager;
-  setDate: React.Dispatch<React.SetStateAction<DateManager>>;
-};
-
-type CalendarHeader = (props: CalendarHeaderProps) => JSX.Element;
-
-export const CalendarHeader: CalendarHeader = ({
-  view,
-  //   setView,
-  date,
-  setDate,
-}: {
-  view: "month" | "consecutive";
-  setView: React.Dispatch<React.SetStateAction<"month" | "consecutive">>;
-  date: DateManager;
-  setDate: React.Dispatch<React.SetStateAction<DateManager>>;
-}) => {
-  if (view === "month") {
+export const CalendarHeader = () => {
+  const { view, date, setDate } = useCalendarData();
+  if (view === CalendarView.Month) {
     return (
       <div className="flex gap-4 p-4 justify-center items-center text-gray-700 text-xl">
         <button onClick={() => setDate(date.backOneMonth())}>
@@ -47,6 +33,6 @@ export const CalendarHeader: CalendarHeader = ({
       </div>
     );
   } else {
-    return <></>;
+    return <>Consecutive View Not Implemented</>;
   }
 };

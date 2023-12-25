@@ -1,28 +1,19 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-import {
-  ActionFunction,
-  Form,
-  redirect,
-  useActionData,
-} from "react-router-dom";
-import { auth } from "../firestore";
+import { Form } from "react-router-dom";
 import { StyledInput } from "../components/StyledInput";
 import { AtSymbolIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import ELMLogo from "../assets/ElmLogo.png";
 import { StyledSubmit } from "../components/StyledSubmit";
+import { useFirebase } from "../providers/FirebaseProvider";
+import { useRedirectLoggedInUser } from "../hooks/useProtectedRoute";
 
 const Login = () => {
+  useRedirectLoggedInUser();
+  const { signIn } = useFirebase();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const errors = useActionData() as
-    | {
-        email?: string;
-        password?: string;
-        other?: string;
-      }
-    | undefined;
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <Form
@@ -68,7 +59,17 @@ const Login = () => {
           <span className="text-red-500">{errors.password}</span>
         ) : null}
 
-        <StyledSubmit name="Login" value="Login" />
+        <StyledSubmit
+          name="Log In"
+          value="Log In"
+          onClick={async (e) => {
+            e.preventDefault();
+            const errors = await signIn(email, password);
+            if (errors) {
+              setErrors(errors);
+            }
+          }}
+        />
         {errors?.other ? (
           <span className="text-red-500">{errors.other}</span>
         ) : null}
@@ -84,33 +85,3 @@ const Login = () => {
 };
 
 export default Login;
-
-export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const { email, password } = Object.fromEntries(formData);
-  const errors: { email?: string; password?: string; other?: string } = {};
-  if (email && password) {
-    return await signInWithEmailAndPassword(
-      auth,
-      email as string,
-      password as string
-    )
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
-        return redirect("/");
-      })
-      .catch((e) => {
-        errors.other = e.toString();
-        return errors;
-      });
-  } else {
-    if (!email) {
-      errors.email = "Invalid email address.";
-    }
-    if (!password) {
-      errors.password = "Invalid password.";
-    }
-    return errors;
-  }
-};

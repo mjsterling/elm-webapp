@@ -1,30 +1,46 @@
 import {
+  ArrowLeftStartOnRectangleIcon,
   ArrowsRightLeftIcon,
   CalendarDaysIcon,
+  UserCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
 import { useState } from "react";
-import { auth } from "../firestore";
 import { StyledNavLink } from "../components/StyledNavLink";
+import { useFirebase } from "../providers/FirebaseProvider";
 
 export const Sidebar = () => {
-  const { currentUser } = auth;
+  const firebase = useFirebase();
   const [collapsed, setCollapsed] = useState(false);
   return (
     <div
-      className="flex flex-col h-full w-60 relative transition-all p-2"
+      className="flex flex-col h-full w-60 relative transition-all p-2 justify-between"
       style={{ marginLeft: collapsed ? "-230px" : "0" }}
     >
-      <h3 className="text-lg">
-        Welcome back{currentUser?.displayName ? ", " : ""}
-        {currentUser?.displayName}!
-      </h3>
-      <div className="w-full flex flex-col gap-1 my-4">
-        <StyledNavLink to="/" icon={<CalendarDaysIcon />} label="Calendar" />
+      <div className="flex flex-col">
+        <h3 className="text-lg">
+          Welcome back{firebase?.auth.currentUser?.displayName ? ", " : ""}
+          {firebase?.auth.currentUser?.displayName}!
+        </h3>
+        <div className="w-full flex flex-col gap-1 my-4">
+          <StyledNavLink to="/" icon={<CalendarDaysIcon />} label="Calendar" />
+          <StyledNavLink
+            to="/users"
+            icon={<UserGroupIcon />}
+            label="Manage Users"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col">
         <StyledNavLink
-          to="/users"
-          icon={<UserGroupIcon />}
-          label="Manage Users"
+          to="/account"
+          icon={<UserCircleIcon />}
+          label="Account Settings"
+        />
+        <StyledNavLink
+          to="/logout"
+          icon={<ArrowLeftStartOnRectangleIcon />}
+          label="Log out"
         />
       </div>
       <button

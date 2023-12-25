@@ -1,24 +1,15 @@
-import { Outlet, redirect } from "react-router-dom";
-import { auth } from "../firestore";
-import { useState } from "react";
-import { Calendar, Header, Sidebar } from "../widgets";
-
-export async function loader() {
-  console.log(auth.currentUser);
-  if (auth.currentUser === null) {
-    return redirect("/login");
-  }
-  return null;
-}
+import { Outlet } from "react-router-dom";
+import { Header, Sidebar } from "../widgets";
+import { useProtectedRoute } from "../hooks/useProtectedRoute";
 
 const Dashboard = () => {
   return (
     <div className="flex flex-col w-full h-screen">
-      <Header />
+      {/* <Header /> */}
       <div className="flex h-full w-full">
         <Sidebar />
-        <div className="flex justify-center items-center h-full w-full">
-          <Calendar />
+        <div className="flex justify-center items-center h-full w-full bg-gray-100">
+          <Outlet />
         </div>
       </div>
     </div>

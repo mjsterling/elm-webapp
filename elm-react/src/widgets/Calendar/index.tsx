@@ -1,12 +1,13 @@
 import { useMemo, useState } from "react";
-import { DateManager } from "../../components/DateManager";
 import { CalendarHeader } from "./CalendarHeader";
 import { DayCard } from "./DayCard";
+import {
+  CalendarProvider,
+  useCalendarData,
+} from "../../providers/CalendarProvider";
 
-export const Calendar = () => {
-  const [view, setView] = useState<"month" | "consecutive">("month");
-  const [date, setDate] = useState(new DateManager());
-
+const CalendarWidget = () => {
+  const { date } = useCalendarData();
   const CalendarBody = () => {
     const numRows = Math.ceil(
       (new Date(date.year, date.month, 1).getDay() + date.daysIn(date.month)) /
@@ -34,7 +35,6 @@ export const Calendar = () => {
         {gridDates.map((currentDate, index) => (
           <DayCard
             key={`daycard__${currentDate.toUTCString()}`}
-            date={date}
             currentDate={currentDate}
             index={index}
           />
@@ -44,13 +44,14 @@ export const Calendar = () => {
   };
   return (
     <div className="flex flex-col w-full h-full bg-gray-100">
-      <CalendarHeader
-        view={view}
-        setView={setView}
-        date={date}
-        setDate={setDate}
-      />
+      <CalendarHeader />
       <CalendarBody />
     </div>
   );
 };
+
+export const Calendar = () => (
+  <CalendarProvider>
+    <CalendarWidget />
+  </CalendarProvider>
+);

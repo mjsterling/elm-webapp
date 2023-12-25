@@ -1,33 +1,34 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Dashboard, { loader as dashboardLoader } from "./routes/Dashboard";
-import Login, { action as loginAction } from "./routes/Login";
-import Signup, { action as signupAction } from "./routes/Signup";
-import { Calendar, ManageUsers } from "./routes";
+import { Dashboard, Login, Calendar, ManageUsers, Logout } from "./routes";
+import { FirebaseProvider } from "./providers/FirebaseProvider";
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Dashboard />,
-    loader: dashboardLoader,
+    element: <FirebaseProvider />,
     children: [
       {
         path: "/",
-        element: <Calendar />,
+        element: <Dashboard />,
+        children: [
+          {
+            id: "index",
+            path: "",
+            element: <Calendar />,
+          },
+          {
+            path: "users",
+            element: <ManageUsers />,
+          },
+        ],
       },
       {
-        path: "/users",
-        element: <ManageUsers />,
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/logout",
+        element: <Logout />,
       },
     ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-    action: loginAction,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-    action: signupAction,
   },
 ]);
 
