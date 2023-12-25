@@ -7,6 +7,10 @@ export class DateManager {
     return new Date(this.year, this.month, this.date);
   }
 
+  get day() {
+    return this.asDate.getDay();
+  }
+
   get monthAsFullString() {
     return [
       "January",
@@ -31,7 +35,7 @@ export class DateManager {
   daysIn(month: number) {
     switch (month) {
       case 1:
-        return 28;
+        return this.year % 4 === 0 ? 29 : 28;
       case 3:
       case 5:
       case 8:
@@ -43,9 +47,12 @@ export class DateManager {
   }
 
   constructor(date: Date = new Date()) {
+    console.log("input", date.toDateString());
     this.year = date.getFullYear();
     this.month = date.getMonth();
     this.date = date.getDate();
+
+    console.log("init", this.year, this.month, this.date, this.day);
   }
 
   backOneMonth() {

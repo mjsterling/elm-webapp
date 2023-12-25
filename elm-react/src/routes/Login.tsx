@@ -72,12 +72,12 @@ const Login = () => {
         {errors?.other ? (
           <span className="text-red-500">{errors.other}</span>
         ) : null}
-        <p className="text-gray-700 text-sm">
+        {/* <p className="text-gray-700 text-sm">
           Don't have an account?{" "}
           <a href="/signup" className="text-blue-500">
             Sign up
           </a>
-        </p>
+        </p> */}
       </Form>
     </div>
   );

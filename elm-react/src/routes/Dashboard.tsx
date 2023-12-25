@@ -1,4 +1,4 @@
-import { redirect } from "react-router-dom";
+import { Outlet, redirect } from "react-router-dom";
 import { auth } from "../firestore";
 import { useState } from "react";
 import { Calendar, Header, Sidebar } from "../widgets";

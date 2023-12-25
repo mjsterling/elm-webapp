@@ -17,19 +17,3 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 export default app;
-// const FirestoreContext = createContext<{ db: Firestore } | null>(null);
-
-// export const FirestoreProvider = ({
-//   children,
-// }: {
-//   children: React.ReactNode;
-// }) => {
-//   const db = getFirestore(app);
-//   return (
-//     <FirestoreContext.Provider value={{ db }}>
-//       {children}
-//     </FirestoreContext.Provider>
-//   );
-// };
-
-// export const useFirestore = useContext(FirestoreContext);
