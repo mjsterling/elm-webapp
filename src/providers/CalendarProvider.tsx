@@ -20,6 +20,8 @@ type CalendarProps = {
   setBookingData: React.Dispatch<React.SetStateAction<Partial<Booking>>>;
   bookingModalOpen: boolean;
   setBookingModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  hoveredBooking: string;
+  setHoveredBooking: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const CalendarContext = React.createContext<CalendarProps>({
@@ -32,6 +34,8 @@ const CalendarContext = React.createContext<CalendarProps>({
   setBookingData: () => {},
   bookingModalOpen: false,
   setBookingModalOpen: () => {},
+  hoveredBooking: "",
+  setHoveredBooking: () => {},
 });
 
 export const CalendarProvider = ({
@@ -43,6 +47,7 @@ export const CalendarProvider = ({
   const [date, setDate] = useState(new DateManager());
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [bookingData, setBookingData] = useState<Partial<Booking>>({});
+  const [hoveredBooking, setHoveredBooking] = useState("");
 
   const bookings = useCollection(Collection.bookings);
 
@@ -58,6 +63,8 @@ export const CalendarProvider = ({
         setBookingData,
         bookingModalOpen,
         setBookingModalOpen,
+        hoveredBooking,
+        setHoveredBooking,
       }}
     >
       {children}

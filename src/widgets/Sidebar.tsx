@@ -1,6 +1,7 @@
 import {
   ArrowLeftStartOnRectangleIcon,
   ArrowsRightLeftIcon,
+  BuildingOfficeIcon,
   CalendarDaysIcon,
   UserCircleIcon,
   UserGroupIcon,
@@ -29,6 +30,11 @@ export const Sidebar = () => {
             to="/users"
             icon={<UserGroupIcon />}
             label="Manage Users"
+          />
+          <StyledNavLink
+            to="/rooms"
+            icon={<BuildingOfficeIcon />}
+            label="Manage Rooms"
           />
         </div>
       </div>

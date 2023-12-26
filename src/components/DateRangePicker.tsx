@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { DateManager } from "./DateManager";
 import clsx from "clsx";
 import { IconButton } from "./IconButton";
@@ -35,14 +35,6 @@ export const DateRangePicker: DateRangePicker = ({
       dayOfCurrentDate > dayOfStartDate && dayOfCurrentDate < dayOfEndDate;
 
     const handleDateChange = () => {
-      console.table({
-        "day of current date": dayOfCurrentDate,
-        "day of start date": dayOfStartDate,
-        "day of end date": dayOfEndDate,
-        "is start date": isStartDate,
-        "is end date": isEndDate,
-        "is between date": isBetweenDate,
-      });
       if (isEndDate) {
         console.log("hit is end date");
         setDates({ startDate: currentDate, endDate: undefined });
@@ -71,10 +63,10 @@ export const DateRangePicker: DateRangePicker = ({
           className="h-full w-full absolute left-0 top-0"
         >
           {isStartDate || isBetweenDate ? (
-            <path d="M 50,5 h -25 a 20,20 0 0,0 0,40 h 25 Z" fill="#DDF" />
+            <path d="M 100,5 h -75 a 20,20 0 0,0 0,40 h 75 Z" fill="#DDF" />
           ) : null}
           {isEndDate || isBetweenDate ? (
-            <path d="M 0,5 h 25 a 20,20 0 0,1 0,40 h -25 Z" fill="#DDF" />
+            <path d="M -100,5 h 125 a 20,20 0 0,1 0,40 h -125 Z" fill="#DDF" />
           ) : null}
           <circle
             cx={25}

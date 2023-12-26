@@ -1,5 +1,5 @@
 import { Modal } from "./Modal";
-import { StyledSubmit } from "./StyledSubmit";
+import { StyledButton } from "./StyledButton";
 
 export type ConfirmModalProps = {
   open: boolean;
@@ -34,15 +34,15 @@ export const ConfirmModal: ConfirmModal = ({
       </h5>
       <p className="p-2 text-center">{body}</p>
       <div className="flex justify-evenly items-center p-2">
-        <StyledSubmit
-          className="bg-red-600 border border-red-600 text-white hover:bg-white hover:text-red-600 transition-colors"
+        <StyledButton
+          theme="error"
           onClick={() => {
             onConfirm();
           }}
           label="I said DO IT!"
         />
-        <StyledSubmit
-          className="hover:text-blue-700 hover:bg-white border border-blue-700 transition-colors"
+        <StyledButton
+          theme="primary"
           onClick={() => {
             onDecline?.();
             setOpen(false);

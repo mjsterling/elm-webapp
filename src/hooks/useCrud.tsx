@@ -16,8 +16,13 @@ export const useCrud = (collection: Collection) => {
       ...fields,
     });
   };
-  const update = async (id: string, fields: any) => {
-    await updateDoc(doc(db, collection, id), { ...fields });
+  const update = async (fields: any) => {
+    const { id, ...restData } = fields;
+    if (id) {
+      await updateDoc(doc(db, collection, id), { ...restData });
+    } else {
+      alert("Couldnt update record");
+    }
   };
   const destroy = async (id: string) => {
     await deleteDoc(doc(db, collection, id));

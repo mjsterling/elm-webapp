@@ -20,19 +20,25 @@ export const ViewSwitch = () => {
     viewFor: CalendarView;
     icon: JSX.Element;
   }) => (
-    <StyledFab
+    <button
       onClick={() => {
         setView(viewFor);
       }}
-      icon={icon}
       className={clsx(
-        viewFor === view ? "bg-blue-700 text-white" : "bg-white text-blue-700"
+        "p-2",
+        "gap-2 transition-colors bg-blue-700 rounded-full flex justify-center items-center",
+        "border border-blue-700",
+        viewFor === view
+          ? "bg-blue-700 text-white hover:bg-white hover:text-blue-700"
+          : "bg-white text-blue-700 hover:bg-blue-700 hover:text-white"
       )}
-    />
+    >
+      <span className="h-6 w-6">{icon}</span>
+    </button>
   );
 
   return (
-    <div className="absolute top-8 right-8 flex gap-2">
+    <div className="absolute bottom-8 left-8 flex gap-2">
       <SelfAwareFab viewFor={CalendarView.Month} icon={<CalendarDaysIcon />} />
       <SelfAwareFab
         viewFor={CalendarView.Consecutive}

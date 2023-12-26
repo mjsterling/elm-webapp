@@ -8,7 +8,7 @@ import {
   EyeSlashIcon,
 } from "@heroicons/react/24/solid";
 import ELMLogo from "../assets/ElmLogo.png";
-import { StyledSubmit } from "../components/StyledSubmit";
+import { StyledButton } from "../components/StyledButton";
 import { useFirebase } from "../providers/FirebaseProvider";
 import { useAuthHandler } from "../hooks/useAuthHandler";
 
@@ -62,9 +62,10 @@ const Login = () => {
           <span className="text-red-500">{errors.password}</span>
         ) : null}
 
-        <StyledSubmit
+        <StyledButton
           label="Log In"
-          icon={<ArrowRightEndOnRectangleIcon />}
+          type="submit"
+          startIcon={<ArrowRightEndOnRectangleIcon />}
           onClick={async (e) => {
             e.preventDefault();
             const errors = await signIn(email, password);
@@ -76,12 +77,6 @@ const Login = () => {
         {errors?.other ? (
           <span className="text-red-500">{errors.other}</span>
         ) : null}
-        {/* <p className="text-gray-700 text-sm">
-          Don't have an account?{" "}
-          <a href="/signup" className="text-blue-700">
-            Sign up
-          </a>
-        </p> */}
       </Form>
     </div>
   );

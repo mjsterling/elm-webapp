@@ -12,7 +12,7 @@ export const StyledFab: StyledFab = ({ className, icon, label, ...props }) => {
       className={clsx(
         label ? "px-4 py-2" : "p-2",
         "gap-2 transition-colors bg-blue-700 rounded-full flex justify-center items-center",
-        "hover:bg-white border border-blue-700 hover:text-blue-700 text-white",
+        "border border-blue-700 text-white hover:bg-white hover:text-blue-700",
         className
       )}
       {...props}

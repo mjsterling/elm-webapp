@@ -10,4 +10,4 @@ export * from "./StyledCheckbox";
 export * from "./StyledFAB";
 export * from "./StyledInput";
 export * from "./StyledNavLink";
-export * from "./StyledSubmit";
+export * from "./StyledButton";

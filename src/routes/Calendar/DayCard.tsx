@@ -1,4 +1,7 @@
+import { useMemo } from "react";
 import { useCalendarData } from "../../providers/CalendarProvider";
+import { daysSinceEpoch } from "../../utils/dateUtils";
+import { BookingLine } from "./BookingLine";
 
 type DayCardProps = {
   currentDate: Date;
@@ -9,8 +12,7 @@ type DayCardProps = {
 type DayCard = (props: DayCardProps) => JSX.Element;
 
 export const DayCard: DayCard = ({ currentDate, index }) => {
-  const { date, bookings, setBookingModalOpen, bookingData, setBookingData } =
-    useCalendarData();
+  const { date, bookings } = useCalendarData();
   const calculateBorder = (): React.CSSProperties => {
     return {
       borderTopWidth: index <= 6 ? "2px" : "0",
@@ -20,14 +22,24 @@ export const DayCard: DayCard = ({ currentDate, index }) => {
     };
   };
 
+  const currentDateAsDays = daysSinceEpoch(currentDate);
+
+  const todaysBookings = useMemo(
+    () =>
+      bookings.filter(
+        (booking) =>
+          currentDateAsDays >= daysSinceEpoch(booking.startDate) &&
+          currentDateAsDays <= daysSinceEpoch(booking.endDate)
+      ),
+    [bookings]
+  );
+
   const isCurrentMonth = currentDate.getMonth() === date.month;
-  const isCurrentDate =
-    Math.floor(currentDate.getTime() / 86.4e6) ===
-    Math.floor(new Date().getTime() / 86.4e6);
+  const isCurrentDate = currentDateAsDays === daysSinceEpoch(new Date());
 
   return (
     <div
-      className="border-2 border-gray-700 flex p-2 group relative"
+      className="border-gray-700 flex"
       style={{
         ...calculateBorder(),
         backgroundColor: isCurrentDate
@@ -38,14 +50,20 @@ export const DayCard: DayCard = ({ currentDate, index }) => {
       }}
     >
       <svg
-        viewBox="0 0 200 200"
-        className="h-full w-full absolute left-0 top-0"
+        viewBox="0 0 100 100"
+        className="h-full w-full left-0 top-0"
+        style={index % 7 === 0 ? { marginTop: "-1px" } : {}}
       >
+        {todaysBookings.length
+          ? todaysBookings.map((booking) => (
+              <BookingLine booking={booking} currentDate={currentDate} />
+            ))
+          : null}
         <text
           className="select-none"
-          x="100"
-          y="110"
-          fontSize={120}
+          x="50"
+          y="50"
+          fontSize={50}
           fontWeight="bold"
           textAnchor="middle"
           alignmentBaseline="middle"

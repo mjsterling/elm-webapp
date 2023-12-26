@@ -9,7 +9,7 @@ const Dashboard = () => {
       {/* <Header /> */}
       <div className="flex h-full w-full">
         <Sidebar />
-        <div className="flex justify-center items-center h-full w-full bg-gray-100">
+        <div className="flex justify-center items-center h-full w-full bg-gray-100 pt-8">
           <Outlet />
         </div>
       </div>

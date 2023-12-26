@@ -1,5 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Dashboard, Login, Calendar, ManageUsers, Logout } from "./routes";
+import {
+  Dashboard,
+  Login,
+  Calendar,
+  ManageUsers,
+  Logout,
+  Rooms,
+} from "./routes";
 import { FirebaseProvider } from "./providers/FirebaseProvider";
 const router = createBrowserRouter([
   {
@@ -17,6 +24,10 @@ const router = createBrowserRouter([
           {
             path: "users",
             element: <ManageUsers />,
+          },
+          {
+            path: "rooms",
+            element: <Rooms />,
           },
         ],
       },

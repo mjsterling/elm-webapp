@@ -1,7 +1,7 @@
 import { CloudArrowUpIcon } from "@heroicons/react/16/solid";
 import { Modal } from "../../components/Modal";
 import { StyledInput } from "../../components/StyledInput";
-import { StyledSubmit } from "../../components/StyledSubmit";
+import { StyledButton } from "../../components/StyledButton";
 import { useCrud } from "../../hooks/useCrud";
 import { Collection } from "../../models/collection";
 
@@ -43,11 +43,11 @@ export const NewUserModal: NewUserModal = ({
         value={data.lastName}
         onChange={(e) => setData({ ...data, lastName: e.currentTarget.value })}
       />
-      <StyledSubmit
-        icon={<CloudArrowUpIcon />}
+      <StyledButton
+        startIcon={<CloudArrowUpIcon />}
         onClick={async () => {
           if (data.id) {
-            await update(data.id, { ...data }).then(() => {
+            await update(data).then(() => {
               setOpen(false);
             });
           } else {

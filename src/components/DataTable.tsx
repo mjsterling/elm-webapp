@@ -33,7 +33,7 @@ export const DataTable = ({
     <div
       key={`datatable__${dbKey}__${label}`}
       className={clsx(
-        "group select-none gap-3 cursor-pointer font-semibold py-2 px-3 flex items-center justify-center bg-blue-200",
+        "group select-none gap-3 cursor-pointer font-semibold py-2 px-3 flex items-center justify-center bg-blue-100",
         index === 0 && "rounded-tl",
         index === Object.keys(headers).length - 1 && "rounded-tr"
       )}
@@ -73,7 +73,7 @@ export const DataTable = ({
     <div
       key={`datacell__${dbKey}__${value}`}
       className={clsx(
-        row % 2 === 0 ? "bg-white" : "bg-blue-100",
+        row % 2 === 0 ? "bg-white" : "bg-blue-50",
         "py-2 px-3 flex items-center justify-center",
         row === (sortedData?.length ?? 0) - 1 &&
           (col === 0 || col === Object.keys(headers).length - 1)

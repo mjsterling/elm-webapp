@@ -38,7 +38,7 @@ const ManageUsers = () => {
   }, [newUserModalOpen]);
   return (
     <>
-      <div className="h-full w-full justify-center items-center flex flex-col gap-4 p-8 relative">
+      <div className="h-full w-full justify-start items-center flex flex-col gap-4 p-8 relative">
         <h1>User Management</h1>
         <DataTable
           headers={{
