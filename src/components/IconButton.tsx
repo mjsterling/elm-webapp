@@ -7,8 +7,11 @@ type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 type IconButton = React.FC<IconButtonProps>;
 export const IconButton: IconButton = ({ icon, className, ...props }) => {
   return (
-    <button className={clsx(className)} {...props}>
-      {icon}
+    <button
+      className={clsx("p-2 rounded-full text-black bg-gray-200", className)}
+      {...props}
+    >
+      <span className="h-4 w-4 block">{icon}</span>
     </button>
   );
 };

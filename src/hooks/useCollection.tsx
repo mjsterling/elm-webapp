@@ -16,7 +16,9 @@ export const useCollection = (_collection: Collection) => {
       query(collection(db, _collection)),
       (querySnapshot) => {
         const _records: DocumentData[] = [];
-        querySnapshot.forEach((doc) => _records.push(doc.data()));
+        querySnapshot.forEach((doc) =>
+          _records.push({ id: doc.id, ...doc.data() })
+        );
         setRecords(_records);
       }
     );

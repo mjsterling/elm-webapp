@@ -1,5 +1,12 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { Firestore, collection, getFirestore } from "firebase/firestore";
+import {
+  DocumentData,
+  Firestore,
+  collection,
+  getFirestore,
+  onSnapshot,
+  query,
+} from "firebase/firestore";
 import {
   Auth,
   browserSessionPersistence,
@@ -44,6 +51,18 @@ export const FirebaseProvider = () => {
   const [app] = useState(initializeApp(firebaseConfig));
   const [db] = useState(getFirestore(app));
   const [auth] = useState(getAuth(app));
+  const [users, setUsers] = useState<DocumentData[]>();
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "users")),
+      (querySnapshot) => {
+        const _records: DocumentData[] = [];
+        querySnapshot.forEach((doc) => _records.push(doc.data()));
+        setUsers(_records);
+      }
+    );
+    return unsubscribe;
+  }, []);
   const navigate = useNavigate();
 
   const signIn = async (email: string, password: string) => {
@@ -57,24 +76,16 @@ export const FirebaseProvider = () => {
       return errors;
     }
 
-    const users = collection(db, Collection.users);
-    console.log(users);
-    if (users) {
-      setPersistence(auth, browserSessionPersistence).then(async () => {
-        return signInWithEmailAndPassword(
-          auth,
-          email as string,
-          password as string
-        )
-          .then((userCredential) => {
-            const user = userCredential.user;
-            if (user) navigate("/");
-          })
-          .catch((e) => {
-            errors.other = e.message();
-            return errors;
-          });
-      });
+    if (users?.find((user) => user.email === email)) {
+      signInWithEmailAndPassword(auth, email as string, password as string)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          if (user) navigate("/");
+        })
+        .catch((e) => {
+          errors.other = e.message();
+          return errors;
+        });
     }
   };
 

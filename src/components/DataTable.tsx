@@ -1,5 +1,7 @@
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import clsx from "clsx";
 import { DocumentData } from "firebase/firestore";
+import { useMemo, useState } from "react";
 
 export const DataTable = ({
   headers,
@@ -8,38 +10,76 @@ export const DataTable = ({
   headers: { [key: string]: string };
   data: { [key: string]: JSX.Element }[] | undefined;
 }) => {
+  const [sort, setSort] = useState({
+    key: Object.keys(headers)[0],
+    ascending: true,
+  });
+  const sortedData = useMemo(
+    () =>
+      data?.sort((a, b) =>
+        a[sort.key] < b[sort.key] ? -1 : a[sort.key] > b[sort.key] ? 1 : 0
+      ),
+    [sort.key, sort.ascending, data]
+  );
+  console.log(sortedData);
   const HeaderCell = ({
-    content,
+    dbKey,
+    label,
     index,
   }: {
-    content: string;
+    dbKey: string;
+    label: string;
     index: number;
   }) => (
     <div
+      key={`datatable__${dbKey}__${label}`}
       className={clsx(
-        "font-semibold p-2 flex items-center justify-center bg-blue-200",
+        "group select-none gap-3 cursor-pointer font-semibold py-2 px-3 flex items-center justify-center bg-blue-200",
         index === 0 && "rounded-tl",
         index === Object.keys(headers).length - 1 && "rounded-tr"
       )}
+      onClick={() =>
+        setSort({
+          key: dbKey,
+          ascending: dbKey === sort.key ? !sort.ascending : true,
+        })
+      }
     >
-      {content}
+      <div className="h-4 w-4" aria-hidden="true" />
+      {label}
+      <div className="h-4 w-4">
+        {dbKey === sort.key ? (
+          sort.ascending ? (
+            <ChevronDownIcon />
+          ) : (
+            <ChevronUpIcon />
+          )
+        ) : (
+          <ChevronDownIcon className="text-gray-500 hidden group-hover:block" />
+        )}
+      </div>
     </div>
   );
   const DataCell = ({
     row,
+    col,
     dbKey,
     value,
   }: {
     row: number;
+    col: number;
     dbKey: string;
     value: any;
   }) => (
     <div
+      key={`datacell__${dbKey}__${value}`}
       className={clsx(
         row % 2 === 0 ? "bg-white" : "bg-blue-100",
-        "p-2 flex items-center justify-center"
+        "py-2 px-3 flex items-center justify-center",
+        row === (sortedData?.length ?? 0) - 1 &&
+          (col === 0 || col === Object.keys(headers).length - 1)
       )}
-      style={{ gridColumn: Object.keys(headers).indexOf(dbKey) + 1 }}
+      style={{ gridColumn: Object.keys(headers)?.indexOf(dbKey) + 1 }}
     >
       {value}
     </div>
@@ -48,9 +88,10 @@ export const DataTable = ({
     const dataEntries = Object.entries(datum);
     return (
       <>
-        {Object.keys(headers).map((header) => (
+        {Object.keys(headers).map((header, col) => (
           <DataCell
             row={row}
+            col={col}
             dbKey={header}
             value={dataEntries.find(([key]) => key === header)?.[1] ?? ""}
           />
@@ -59,10 +100,10 @@ export const DataTable = ({
     );
   };
 
-  if (!data) return null;
+  if (!sortedData) return null;
   return (
     <div
-      className="grid rounded"
+      className="grid"
       style={
         {
           // gridTemplateColumns: `repeat(${
@@ -72,10 +113,10 @@ export const DataTable = ({
         }
       }
     >
-      {Object.values(headers).map((label, index) => (
-        <HeaderCell content={label} index={index} />
+      {Object.entries(headers).map(([dbKey, label], index) => (
+        <HeaderCell dbKey={dbKey} label={label} index={index} />
       ))}
-      {data.map((datum, row) => (
+      {sortedData.map((datum, row) => (
         <DataRow datum={datum} row={row} />
       ))}
     </div>

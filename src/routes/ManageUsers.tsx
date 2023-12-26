@@ -1,11 +1,12 @@
 import {
   CloudArrowUpIcon,
   PencilIcon,
+  TrashIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/solid";
 import { useCollection } from "../hooks/useCollection";
 import { Collection } from "../models/collection";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyledFab } from "../components/StyledFAB";
 import { Modal } from "../components/Modal";
 import { StyledInput } from "../components/StyledInput";
@@ -16,30 +17,31 @@ import { IconButton } from "../components/IconButton";
 
 const ManageUsers = () => {
   const users = useCollection(Collection.users);
-  const { create } = useCrud(Collection.users);
+  const { create, update, destroy } = useCrud(Collection.users);
   const [newUserModalOpen, setNewUserModalOpen] = useState(false);
   const openNewUserModal = () => setNewUserModalOpen(true);
-  console.log(users);
+  console.log("users", users);
   const [editId, setEditId] = useState("");
   const [data, setData] = useState({
     email: "",
     firstName: "",
     lastName: "",
   });
-  const errors = useState({
-    email: "",
-    firstName: "",
-    lastName: "",
-  });
   const editUser = ({ id, email, firstName, lastName }: UserData) => {
+    setEditId(id);
     setData({
       email,
       firstName,
       lastName,
     });
-    setEditId(id);
     setNewUserModalOpen(true);
   };
+  useEffect(() => {
+    if (newUserModalOpen === false) {
+      setEditId("");
+      setData({ email: "", firstName: "", lastName: "" });
+    }
+  }, [newUserModalOpen]);
   return (
     <>
       <div className="h-full w-full justify-center items-center flex flex-col gap-4 p-8 relative">
@@ -54,12 +56,16 @@ const ManageUsers = () => {
           data={users?.map((user) => ({
             ...user,
             actions: (
-              <>
+              <div className="flex gap-1">
                 <IconButton
                   icon={<PencilIcon />}
                   onClick={() => editUser(user as UserData)}
                 />
-              </>
+                <IconButton
+                  icon={<TrashIcon />}
+                  onClick={() => destroy(user.id)}
+                />
+              </div>
             ),
           }))}
         />
@@ -73,7 +79,7 @@ const ManageUsers = () => {
       <Modal
         open={newUserModalOpen}
         setOpen={setNewUserModalOpen}
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-3"
       >
         <StyledInput
           label="Email Address"
@@ -97,11 +103,17 @@ const ManageUsers = () => {
         <StyledSubmit
           icon={<CloudArrowUpIcon />}
           onClick={async () => {
+            if (editId) {
+              await update(editId, { ...data }).then(() => {
+                setNewUserModalOpen(false);
+              });
+            } else {
+            }
             await create(data).then(() => {
               setNewUserModalOpen(false);
             });
           }}
-          label="Create User"
+          label={editId ? "Update User" : "Create User"}
         />
       </Modal>
     </>
