@@ -100,6 +100,7 @@ export const DateRangePicker: DateRangePicker = ({
                 ? "#00F"
                 : "#000"
             }
+            className="select-none"
           >
             {currentDate.getDate()}
           </text>
@@ -114,7 +115,7 @@ export const DateRangePicker: DateRangePicker = ({
             // stroke="#FFF"
             // strokeWidth="1"
             className={clsx(
-              "group-hover:opacity-100",
+              "group-hover:opacity-100 select-none",
               isStartDate || isEndDate ? "opacity-100" : "opacity-0"
             )}
           >
@@ -139,7 +140,10 @@ export const DateRangePicker: DateRangePicker = ({
 
   return (
     <div className="flex flex-col gap-1 justify-center">
-      <div className="grid w-[350px] h-[400px] grid-cols-7 grid-rows-8 border border-blue-700 rounded overflow-hidden">
+      <div
+        className="grid w-[350px] h-[370px] grid-cols-7 border border-blue-700 rounded overflow-hidden"
+        style={{ gridTemplateRows: "50px 30px repeat(6,1fr)" }}
+      >
         <div className="col-span-7 flex justify-center items-center gap-2">
           <IconButton
             className="bg-transparent"

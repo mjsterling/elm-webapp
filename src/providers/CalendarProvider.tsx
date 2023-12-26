@@ -1,9 +1,13 @@
 import React, { useContext, useState } from "react";
 import { DateManager } from "../components/DateManager";
+import { useCollection } from "../hooks";
+import { Collection } from "../models/collection";
+import { DocumentData } from "firebase/firestore";
 
 export enum CalendarView {
   Month,
   Consecutive,
+  Rooms,
 }
 
 type CalendarProps = {
@@ -11,9 +15,11 @@ type CalendarProps = {
   setView: React.Dispatch<React.SetStateAction<CalendarView>>;
   date: DateManager;
   setDate: React.Dispatch<React.SetStateAction<DateManager>>;
+  bookingData: Partial<Booking>;
+  bookings: DocumentData[];
+  setBookingData: React.Dispatch<React.SetStateAction<Partial<Booking>>>;
   bookingModalOpen: boolean;
-  openBookingModal: () => void;
-  closeBookingModal: () => void;
+  setBookingModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CalendarContext = React.createContext<CalendarProps>({
@@ -21,9 +27,11 @@ const CalendarContext = React.createContext<CalendarProps>({
   setView: () => {},
   date: new DateManager(),
   setDate: () => {},
+  bookings: [],
+  bookingData: {},
+  setBookingData: () => {},
   bookingModalOpen: false,
-  openBookingModal: () => {},
-  closeBookingModal: () => {},
+  setBookingModalOpen: () => {},
 });
 
 export const CalendarProvider = ({
@@ -34,12 +42,9 @@ export const CalendarProvider = ({
   const [view, setView] = useState<CalendarView>(CalendarView.Month);
   const [date, setDate] = useState(new DateManager());
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
-  const openBookingModal = () => {
-    setBookingModalOpen(true);
-  };
-  const closeBookingModal = () => {
-    setBookingModalOpen(false);
-  };
+  const [bookingData, setBookingData] = useState<Partial<Booking>>({});
+
+  const bookings = useCollection(Collection.bookings);
 
   return (
     <CalendarContext.Provider
@@ -48,9 +53,11 @@ export const CalendarProvider = ({
         setView,
         date,
         setDate,
+        bookings,
+        bookingData,
+        setBookingData,
         bookingModalOpen,
-        openBookingModal,
-        closeBookingModal,
+        setBookingModalOpen,
       }}
     >
       {children}

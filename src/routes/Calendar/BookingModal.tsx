@@ -1,24 +1,20 @@
 import { useState } from "react";
-import { Modal } from "../../components/Modal";
 import { CloudArrowUpIcon } from "@heroicons/react/16/solid";
-import { StyledSubmit } from "../../components/StyledSubmit";
 import { Collection } from "../../models/collection";
 import { useCrud } from "../../hooks/useCrud";
-import { StyledCheckbox } from "../../components/StyledCheckbox";
-import { StyledInput } from "../../components/StyledInput";
-import { PlusMinusSelector } from "../../components/PlusMinusSelector";
-import { DateRangePicker } from "../../components/DateRangePicker";
+import {
+  StyledInput,
+  PlusMinusSelector,
+  StyledCheckbox,
+  StyledSubmit,
+  Modal,
+  DateRangePicker,
+} from "../../components";
+import { useCalendarData } from "../../providers/CalendarProvider";
 
-type BookingModalProps = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  editId?: string;
-};
-
-type BookingModal = React.FC<BookingModalProps>;
-
-export const BookingModal: BookingModal = ({ open, setOpen, editId }) => {
-  const { create, update, destroy } = useCrud(Collection.bookings);
+export const BookingModal = () => {
+  const { bookingModalOpen, setBookingModalOpen } = useCalendarData();
+  const { create, update } = useCrud(Collection.bookings);
   const [data, setData] = useState<Partial<Booking>>({});
   const setFormData =
     (field: keyof Booking) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,9 +22,8 @@ export const BookingModal: BookingModal = ({ open, setOpen, editId }) => {
     };
   return (
     <Modal
-      open={open}
-      setOpen={setOpen}
-      onClose={() => setData({})}
+      open={bookingModalOpen}
+      setOpen={setBookingModalOpen}
       title={data.id ? "Edit Booking #" + data.id : "New Booking"}
       className="flex flex-col gap-3"
     >
@@ -139,19 +134,19 @@ export const BookingModal: BookingModal = ({ open, setOpen, editId }) => {
       <StyledSubmit
         icon={<CloudArrowUpIcon />}
         onClick={async () => {
-          if (editId) {
-            await update(editId, { ...data }).then(() => {
+          if (data.id) {
+            await update(data.id, { ...data }).then(() => {
               setData({});
-              setOpen(false);
+              setBookingModalOpen(false);
             });
           } else {
           }
           await create(data).then(() => {
             setData({});
-            setOpen(false);
+            setBookingModalOpen(false);
           });
         }}
-        label={editId ? "Update Booking" : "Create Booking"}
+        label={data.id ? "Update Booking" : "Create Booking"}
       />
     </Modal>
   );

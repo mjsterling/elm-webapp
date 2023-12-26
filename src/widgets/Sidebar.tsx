@@ -14,7 +14,7 @@ export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   return (
     <div
-      className="flex flex-col h-full w-60 relative transition-all p-2 justify-between"
+      className="flex flex-col h-full w-60 fixed md:relative bg-white z-50 shadow transition-all p-2 justify-between"
       style={{ marginLeft: collapsed ? "-230px" : "0" }}
     >
       <div className="flex flex-col">
@@ -46,9 +46,9 @@ export const Sidebar = () => {
       </div>
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-5 top-[calc(50%_-_10px)] z-50 bg-white px-2 py-4 rounded-r-full"
+        className="block h-10 w-10 absolute flex justify-center items-center -right-5 top-[calc(50%_-_20px)] z-50 bg-white rounded-r-full border-r border-r-gray-200"
       >
-        <ArrowsRightLeftIcon className="h-5 w-5 text-gray-700 " />
+        <ArrowsRightLeftIcon className="h-4 w-4 text-gray-700" />
       </button>
     </div>
   );

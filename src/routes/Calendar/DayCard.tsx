@@ -1,4 +1,3 @@
-import { SquaresPlusIcon } from "@heroicons/react/24/solid";
 import { useCalendarData } from "../../providers/CalendarProvider";
 
 type DayCardProps = {
@@ -10,7 +9,8 @@ type DayCardProps = {
 type DayCard = (props: DayCardProps) => JSX.Element;
 
 export const DayCard: DayCard = ({ currentDate, index }) => {
-  const { date, openBookingModal } = useCalendarData();
+  const { date, bookings, setBookingModalOpen, bookingData, setBookingData } =
+    useCalendarData();
   const calculateBorder = (): React.CSSProperties => {
     return {
       borderTopWidth: index <= 6 ? "2px" : "0",
@@ -21,40 +21,55 @@ export const DayCard: DayCard = ({ currentDate, index }) => {
   };
 
   const isCurrentMonth = currentDate.getMonth() === date.month;
+  const isCurrentDate =
+    Math.floor(currentDate.getTime() / 86.4e6) ===
+    Math.floor(new Date().getTime() / 86.4e6);
 
   return (
     <div
       className="border-2 border-gray-700 flex p-2 group relative"
       style={{
         ...calculateBorder(),
-        backgroundColor: isCurrentMonth ? "white" : "#EEE",
+        backgroundColor: isCurrentDate
+          ? "#E7F7FF"
+          : isCurrentMonth
+          ? "white"
+          : "#f3f3f3",
       }}
     >
-      <svg viewBox="0 0 50 50" className="h-full w-full absolute left-0 top-0">
+      <svg
+        viewBox="0 0 200 200"
+        className="h-full w-full absolute left-0 top-0"
+      >
         <text
-          x="25"
-          y="26"
-          fontSize={32}
+          className="select-none"
+          x="100"
+          y="110"
+          fontSize={120}
           fontWeight="bold"
           textAnchor="middle"
           alignmentBaseline="middle"
           fill={
-            currentDate.getMonth() === date.month &&
-            currentDate.getDate() === date.date
-              ? "#DDF"
-              : "#DDD"
+            // currentDate.getMonth() === date.month &&
+            // currentDate.getDate() === date.date
+            //   ? "#DDF"
+            // :
+            "#d7d7d7"
           }
         >
           {currentDate.getDate()}
         </text>
       </svg>
 
-      <button
-        onClick={openBookingModal}
-        className="absolute right-1 bottom-1 rounded-full p-1 bg-blue-400 text-white"
+      {/* <button
+        onClick={() => {
+          setBookingModalOpen(true);
+          setBookingData({ ...bookingData, startDate: currentDate });
+        }}
+        className="absolute right-1 bottom-1 rounded-full p-1 bg-blue-400 text-white  hidden sm:block"
       >
         <SquaresPlusIcon className="h-4 w-4" />
-      </button>
+      </button> */}
     </div>
   );
 };

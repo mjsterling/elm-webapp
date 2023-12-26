@@ -10,7 +10,7 @@ import { Collection } from "../models/collection";
 
 export const useCollection = (_collection: Collection) => {
   const { db } = useFirebase();
-  const [records, setRecords] = useState<DocumentData[]>();
+  const [records, setRecords] = useState<DocumentData[]>([]);
   useEffect(() => {
     const unsubscribe = onSnapshot(
       query(collection(db, _collection)),

@@ -23,7 +23,7 @@ export const Modal: Modal = ({
   const closeModal = () => setOpen(false);
   return open ? (
     <div
-      className="fixed left-0 h-screen w-screen top-0 z-50 bg-[#0003] cursor-pointer flex justify-center items-center"
+      className="fixed left-0 h-screen w-screen top-0 z-50 bg-[#0003] cursor-pointer flex justify-center items-center "
       onClick={() => {
         closeModal();
         onClose?.();
@@ -32,7 +32,7 @@ export const Modal: Modal = ({
       <div
         onClick={(e) => e.stopPropagation()}
         className={clsx(
-          "bg-white rounded h-fit w-fit relative p-4 z-[60] cursor-default",
+          "bg-white rounded h-fit w-fit relative p-4 z-[60] cursor-default max-h-[90%] overflow-y-auto",
           className
         )}
         {...props}
