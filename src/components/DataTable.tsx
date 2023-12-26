@@ -8,19 +8,27 @@ export const DataTable = ({
   data,
 }: {
   headers: { [key: string]: string };
-  data: { [key: string]: JSX.Element }[] | undefined;
+  data: DocumentData[];
 }) => {
   const [sort, setSort] = useState({
     key: Object.keys(headers)[0],
     ascending: true,
   });
-  const sortedData = useMemo(
-    () =>
-      data?.sort((a, b) =>
-        a[sort.key] < b[sort.key] ? -1 : a[sort.key] > b[sort.key] ? 1 : 0
-      ),
-    [sort.key, sort.ascending, data]
-  );
+  const sortedData = useMemo(() => {
+    return data.sort((a, b) =>
+      a[sort.key] < b[sort.key]
+        ? sort.ascending
+          ? -1
+          : 1
+        : a[sort.key] > b[sort.key]
+        ? sort.ascending
+          ? 1
+          : -1
+        : 0
+    );
+  }, [sort.key, sort.ascending, data]);
+  console.table(sort);
+  console.table(sortedData);
   const HeaderCell = ({
     dbKey,
     label,
@@ -89,6 +97,7 @@ export const DataTable = ({
       <>
         {Object.keys(headers).map((header, col) => (
           <DataCell
+            key={`datacell__${datum.id}__${header}__${col}`}
             row={row}
             col={col}
             dbKey={header}

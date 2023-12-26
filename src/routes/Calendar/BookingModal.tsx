@@ -16,6 +16,7 @@ import { useCollection } from "../../hooks";
 import { useMemo, useState } from "react";
 import { BookingDateDisplay } from "./BookingDateDisplay";
 import { TrashIcon } from "@heroicons/react/24/solid";
+import { BookingStatusDisplay } from "./BookingStatus";
 
 export const BookingModal = () => {
   const {
@@ -47,10 +48,18 @@ export const BookingModal = () => {
         open={bookingModalOpen}
         setOpen={setBookingModalOpen}
         title={
-          bookingData.id ? "Edit Booking " + bookingData.id : "New Booking"
+          bookingData.id
+            ? "Editing Booking for " +
+              bookingData.contactFirstName +
+              " " +
+              bookingData.contactLastName
+            : "New Booking"
         }
         className="flex flex-col gap-3"
       >
+        <div className="flex justify-center">
+          <BookingStatusDisplay />
+        </div>
         <div className="flex justify-center">
           <BookingDateDisplay
             startDate={bookingData.startDate}
@@ -127,16 +136,6 @@ export const BookingModal = () => {
           ) : null}
         </div>
 
-        <StyledCheckbox
-          label="Booking confirmed?"
-          checked={bookingData.confirmed ?? false}
-          onChange={() => {
-            setBookingData({
-              ...bookingData,
-              confirmed: !bookingData.confirmed,
-            });
-          }}
-        />
         <div className="grid grid-cols-2 gap-4 flex-col md:flex-row">
           <StyledButton
             startIcon={<CloudArrowUpIcon />}

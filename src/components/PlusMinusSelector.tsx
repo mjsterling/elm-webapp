@@ -15,40 +15,29 @@ export const PlusMinusSelector = ({
   max?: number;
 }) => {
   return (
-    <div className="flex flex-col gap-1">
-      {label ? <span className="text-sm">{label}</span> : null}
-      <div
-        className="flex gap-2 items-center"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <StyledInput
-          startIcon={
-            <MinusIcon
-              className="cursor-pointer"
-              onClick={() => {
-                setValue(
-                  min !== undefined ? Math.max(min, value - 1) : value - 1
-                );
-              }}
-            />
-          }
-          endIcon={
-            <PlusIcon
-              className="cursor-pointer"
-              onClick={() => {
-                setValue(
-                  max !== undefined ? Math.min(max, value + 1) : value + 1
-                );
-              }}
-            />
-          }
-          value={value}
-          onChange={(e) => {
-            setValue(parseInt(e.currentTarget.value));
+    <StyledInput
+      label={label}
+      startIcon={
+        <MinusIcon
+          className="cursor-pointer"
+          onClick={() => {
+            setValue(min !== undefined ? Math.max(min, value - 1) : value - 1);
           }}
-          className="text-center text-lg"
         />
-      </div>
-    </div>
+      }
+      endIcon={
+        <PlusIcon
+          className="cursor-pointer"
+          onClick={() => {
+            setValue(max !== undefined ? Math.min(max, value + 1) : value + 1);
+          }}
+        />
+      }
+      value={value}
+      onChange={(e) => {
+        setValue(parseInt(e.currentTarget.value));
+      }}
+      className="text-center"
+    />
   );
 };

@@ -1,3 +1,5 @@
+import { daysSinceEpoch } from "../utils/dateUtils";
+
 export class DateManager {
   year: number;
   month: number;
@@ -9,6 +11,10 @@ export class DateManager {
 
   get day() {
     return this.asDate.getDay();
+  }
+
+  get asDays() {
+    return daysSinceEpoch(this.asDate);
   }
 
   get monthAsFullString() {
@@ -50,6 +56,14 @@ export class DateManager {
     this.year = date.getFullYear();
     this.month = date.getMonth();
     this.date = date.getDate();
+  }
+
+  backOneDay() {
+    return new DateManager(new Date(this.year, this.month, this.date - 1));
+  }
+
+  forwardOneDay() {
+    return new DateManager(new Date(this.year, this.month, this.date + 1));
   }
 
   backOneMonth() {

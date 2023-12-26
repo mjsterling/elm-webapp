@@ -1,6 +1,6 @@
 interface Booking {
   id: string;
-  confirmed: boolean;
+  status: import("./models/bookingStatus").BookingStatus;
   contactEmail?: string;
   contactFirstName?: string;
   contactLastName?: string;

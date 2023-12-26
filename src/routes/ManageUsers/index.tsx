@@ -47,7 +47,7 @@ const ManageUsers = () => {
             lastName: "Last Name",
             actions: "Actions",
           }}
-          data={users?.map((user) => ({
+          data={users.map((user) => ({
             ...user,
             actions: (
               <div className="flex gap-1">

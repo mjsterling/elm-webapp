@@ -66,7 +66,7 @@ export const BookingLine: BookingLine = ({ booking, currentDate }) => {
             fontWeight={700}
             fill={lineColor}
           >
-            {roomNumber === 0 ? "?!" : roomNumber}
+            {roomNumber === 0 ? "??" : roomNumber}
           </text>
         </>
       ) : null}

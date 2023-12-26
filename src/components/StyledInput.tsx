@@ -24,14 +24,14 @@ export const StyledInput: StyledInput = ({
       ) : null}
       <div
         className={clsx(
-          "p-2 border rounded flex gap-2 items-center",
+          "p-2 border focus-within:border-blue-700 rounded flex gap-2 items-center",
           props.disabled === true ? "bg-[rgba(239,_239,_239)]" : ""
         )}
       >
         <span className="h-4 w-4 text-sm text-gray-500">
           {startIcon ?? null}
         </span>
-        <input className={clsx("outline-none", className)} {...props} />
+        <input className={clsx("outline-none w-full", className)} {...props} />
         <span className="h-4 w-4 text-sm text-gray-500">{endIcon ?? null}</span>
       </div>
       {props.error ? (
