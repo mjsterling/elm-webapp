@@ -18,10 +18,11 @@ export const Sidebar = () => {
       style={{ marginLeft: collapsed ? "-230px" : "0" }}
     >
       <div className="flex flex-col">
-        <h3 className="text-lg">
-          Welcome back{firebase?.auth.currentUser?.displayName ? ", " : ""}
-          {firebase?.auth.currentUser?.displayName}!
-        </h3>
+        <h2 className="pl-2 pt-2">
+          Welcome back
+          {firebase?.auth.currentUser?.displayName ? ", " : ""}
+          {firebase?.auth.currentUser?.displayName?.split(" ")[0]}
+        </h2>
         <div className="w-full flex flex-col gap-1 my-4">
           <StyledNavLink to="/" icon={<CalendarDaysIcon />} label="Calendar" />
           <StyledNavLink

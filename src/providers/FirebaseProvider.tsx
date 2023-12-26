@@ -76,26 +76,24 @@ export const FirebaseProvider = () => {
       return errors;
     }
 
-    if (users?.find((user) => user.email === email)) {
-      signInWithEmailAndPassword(auth, email as string, password as string)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          if (user) navigate("/");
-        })
-        .catch((e) => {
-          errors.other = e.message();
-          return errors;
-        });
-    }
+    // if (users?.find((user) => user.email === email)) {
+    signInWithEmailAndPassword(auth, email as string, password as string)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        if (user) navigate("/");
+      })
+      .catch((e) => {
+        errors.other = e.message();
+        return errors;
+      });
   };
+  // };
 
   const signOut = async () => {
     await auth.signOut().then(() => {
       navigate("/login");
     });
   };
-
-  console.log("user", auth.currentUser);
 
   return (
     <FirebaseContext.Provider

@@ -47,12 +47,9 @@ export class DateManager {
   }
 
   constructor(date: Date = new Date()) {
-    console.log("input", date.toDateString());
     this.year = date.getFullYear();
     this.month = date.getMonth();
     this.date = date.getDate();
-
-    console.log("init", this.year, this.month, this.date, this.day);
   }
 
   backOneMonth() {

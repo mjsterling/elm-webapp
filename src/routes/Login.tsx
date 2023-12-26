@@ -28,8 +28,7 @@ const Login = () => {
         <img src={ELMLogo} className="rounded w-64" />
         <h1 className="text-2xl my-4">Login</h1>
         <StyledInput
-          icon={<AtSymbolIcon />}
-          iconposition="leading"
+          startIcon={<AtSymbolIcon />}
           type="text"
           name="email"
           placeholder="Email"
@@ -40,7 +39,7 @@ const Login = () => {
           <span className="text-red-500">{errors.email}</span>
         ) : null}
         <StyledInput
-          icon={
+          startIcon={
             showPassword ? (
               <EyeIcon
                 className="cursor-pointer"
@@ -53,7 +52,6 @@ const Login = () => {
               />
             )
           }
-          iconposition="leading"
           type={showPassword ? "text" : "password"}
           name="password"
           placeholder="Password"

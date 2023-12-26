@@ -21,7 +21,6 @@ export const DataTable = ({
       ),
     [sort.key, sort.ascending, data]
   );
-  console.log(sortedData);
   const HeaderCell = ({
     dbKey,
     label,

@@ -9,7 +9,7 @@ export const CalendarHeader = () => {
   const { view, date, setDate } = useCalendarData();
   if (view === CalendarView.Month) {
     return (
-      <div className="flex gap-4 p-4 justify-center items-center text-gray-700 text-xl">
+      <div className="flex gap-4 p-4 mt-4 justify-center items-center text-gray-700 text-xl">
         <button onClick={() => setDate(date.backOneMonth())}>
           <ChevronLeftIcon
             title="Back one month"

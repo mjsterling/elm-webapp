@@ -51,9 +51,9 @@ export const DayCard: DayCard = ({ currentDate, index }) => {
 
       <button
         onClick={openBookingModal}
-        className="absolute right-2 bottom-2 rounded-full p-2 bg-blue-700 text-white hidden group-hover:block"
+        className="absolute right-1 bottom-1 rounded-full p-1 bg-blue-400 text-white"
       >
-        <SquaresPlusIcon className="h-6 w-6" />
+        <SquaresPlusIcon className="h-4 w-4" />
       </button>
     </div>
   );

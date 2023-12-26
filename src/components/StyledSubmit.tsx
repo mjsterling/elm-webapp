@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 type StyledSubmitProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   label?: string;
   icon?: JSX.Element;
@@ -8,13 +10,17 @@ type StyledSubmit = React.FC<StyledSubmitProps>;
 export const StyledSubmit: StyledSubmit = ({
   icon,
   label,
+  className,
   iconposition = "leading",
   ...props
 }) => {
   return (
     <button
-      className="rounded px-4 py-2 bg-blue-700 text-white font-semibold cursor-pointer gap-2 flex justify-center items-center"
       type="submit"
+      className={clsx(
+        "rounded px-4 py-2 bg-blue-700 text-white font-semibold cursor-pointer gap-2 flex justify-center items-center",
+        className
+      )}
       {...props}
     >
       {icon && iconposition === "leading" ? (
