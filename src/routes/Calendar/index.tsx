@@ -1,6 +1,4 @@
-import { useMemo } from "react";
 import { CalendarHeader } from "./CalendarHeader";
-import { DayCard } from "./DayCard";
 import {
   CalendarProvider,
   CalendarView,

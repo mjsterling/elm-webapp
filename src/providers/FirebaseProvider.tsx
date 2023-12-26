@@ -7,21 +7,9 @@ import {
   onSnapshot,
   query,
 } from "firebase/firestore";
-import {
-  Auth,
-  browserSessionPersistence,
-  EmailAuthProvider,
-  getAuth,
-  GoogleAuthProvider,
-  setPersistence,
-  signInWithEmailAndPassword,
-  User,
-} from "firebase/auth";
+import { Auth, getAuth, signInWithEmailAndPassword, User } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
-import * as firebaseui from "firebaseui";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useCollection } from "../hooks/useCollection";
-import { Collection } from "../models/collection";
 
 type LoginErrors = {
   email?: string;
@@ -51,14 +39,12 @@ export const FirebaseProvider = () => {
   const [app] = useState(initializeApp(firebaseConfig));
   const [db] = useState(getFirestore(app));
   const [auth] = useState(getAuth(app));
-  const [users, setUsers] = useState<DocumentData[]>();
   useEffect(() => {
     const unsubscribe = onSnapshot(
       query(collection(db, "users")),
       (querySnapshot) => {
         const _records: DocumentData[] = [];
         querySnapshot.forEach((doc) => _records.push(doc.data()));
-        setUsers(_records);
       }
     );
     return unsubscribe;

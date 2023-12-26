@@ -13,7 +13,7 @@ const ManageUsers = () => {
   const users = useCollection(Collection.users);
   const { destroy } = useCrud(Collection.users);
   const [newUserModalOpen, setNewUserModalOpen] = useState(false);
-  const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
+  const [_, setConfirmDeleteModalOpen] = useState(false);
   const [confirmModalProps, setConfirmModalProps] =
     useState<ConfirmModalProps>();
   const openNewUserModal = () => setNewUserModalOpen(true);

@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { StyledFab } from "../../components";
 import {
   CalendarView,
   useCalendarData,

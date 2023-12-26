@@ -5,8 +5,8 @@ import { useState } from "react";
 import { DataTable, StyledFab } from "../components";
 
 const Rooms = () => {
-  const [newRoomModalOpen, setNewRoomModalOpen] = useState(false);
-  const [newRoomData, setNewRoomData] = useState({});
+  const [_, setNewRoomModalOpen] = useState(false);
+  // const [newRoomData, setNewRoomData] = useState({});
   const rooms = useCollection(Collection.rooms);
   const headers = {
     roomNumber: "Room Number",

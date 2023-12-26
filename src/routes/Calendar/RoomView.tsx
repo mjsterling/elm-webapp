@@ -24,7 +24,7 @@ export const RoomView = () => {
         const todaysBookingsForThisRoom = todaysBookings
           .filter((booking) => booking.room === room.roomNumber)
           .sort((a, b) => a.endDateAsDays - b.endDateAsDays);
-        const [currentBooking, incomingBooking] = todaysBookingsForThisRoom;
+        const [currentBooking, _] = todaysBookingsForThisRoom;
         return (
           <div
             className={clsx(

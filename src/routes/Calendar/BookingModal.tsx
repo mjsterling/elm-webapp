@@ -12,35 +12,29 @@ import {
   ConfirmModal,
 } from "../../components";
 import { useCalendarData } from "../../providers/CalendarProvider";
-import { useCollection } from "../../hooks";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { BookingDateDisplay } from "./BookingDateDisplay";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { BookingStatusDisplay } from "./BookingStatus";
 
 export const BookingModal = () => {
-  const {
-    bookings,
-    bookingModalOpen,
-    setBookingModalOpen,
-    bookingData,
-    setBookingData,
-  } = useCalendarData();
+  const { bookingModalOpen, setBookingModalOpen, bookingData, setBookingData } =
+    useCalendarData();
   const { create, update, destroy } = useCrud(Collection.bookings);
   const [confirmModalProps, setConfirmModalProps] =
     useState<ConfirmModalProps>();
-  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [_, setConfirmModalOpen] = useState(false);
   const setFormData =
     (field: keyof Booking) => (e: React.ChangeEvent<HTMLInputElement>) => {
       setBookingData({ ...bookingData, [field]: e.currentTarget.value });
     };
 
-  const rooms = useCollection(Collection.rooms);
+  // const rooms = useCollection(Collection.rooms);
 
-  const availableRoomsForDates = () =>
-    useMemo(() => {
-      return bookings.filter((booking) => true);
-    }, [rooms, bookings]);
+  // const availableRoomsForDates = () =>
+  //   useMemo(() => {
+  //     return bookings.filter((booking) => true);
+  //   }, [rooms, bookings]);
 
   return (
     <>
