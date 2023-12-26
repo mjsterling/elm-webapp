@@ -1,16 +1,20 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { Firestore, getFirestore } from "firebase/firestore";
+import { Firestore, collection, getFirestore } from "firebase/firestore";
 import {
   Auth,
+  browserSessionPersistence,
   EmailAuthProvider,
   getAuth,
   GoogleAuthProvider,
+  setPersistence,
   signInWithEmailAndPassword,
   User,
 } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import * as firebaseui from "firebaseui";
 import { Outlet, useNavigate } from "react-router-dom";
+import { useCollection } from "../hooks/useCollection";
+import { Collection } from "../models/collection";
 
 type LoginErrors = {
   email?: string;
@@ -40,7 +44,6 @@ export const FirebaseProvider = () => {
   const [app] = useState(initializeApp(firebaseConfig));
   const [db] = useState(getFirestore(app));
   const [auth] = useState(getAuth(app));
-  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
   const signIn = async (email: string, password: string) => {
@@ -54,31 +57,39 @@ export const FirebaseProvider = () => {
       return errors;
     }
 
-    return await signInWithEmailAndPassword(
-      auth,
-      email as string,
-      password as string
-    )
-      .then((userCredential) => {
-        const user = userCredential.user;
-        setUser(user);
-        navigate("/");
-      })
-      .catch((e) => {
-        errors.other = e.message();
-        return errors;
+    const users = collection(db, Collection.users);
+    console.log(users);
+    if (users) {
+      setPersistence(auth, browserSessionPersistence).then(async () => {
+        return signInWithEmailAndPassword(
+          auth,
+          email as string,
+          password as string
+        )
+          .then((userCredential) => {
+            const user = userCredential.user;
+            if (user) navigate("/");
+          })
+          .catch((e) => {
+            errors.other = e.message();
+            return errors;
+          });
       });
+    }
   };
 
   const signOut = async () => {
     await auth.signOut().then(() => {
-      setUser(null);
       navigate("/login");
     });
   };
 
+  console.log("user", auth.currentUser);
+
   return (
-    <FirebaseContext.Provider value={{ app, db, auth, user, signIn, signOut }}>
+    <FirebaseContext.Provider
+      value={{ app, db, auth, user: auth.currentUser, signIn, signOut }}
+    >
       <Outlet />
     </FirebaseContext.Provider>
   );

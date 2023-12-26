@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { Form } from "react-router-dom";
 import { StyledInput } from "../components/StyledInput";
-import { AtSymbolIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowRightEndOnRectangleIcon,
+  AtSymbolIcon,
+  EyeIcon,
+  EyeSlashIcon,
+} from "@heroicons/react/24/solid";
 import ELMLogo from "../assets/ElmLogo.png";
 import { StyledSubmit } from "../components/StyledSubmit";
 import { useFirebase } from "../providers/FirebaseProvider";
-import { useRedirectLoggedInUser } from "../hooks/useProtectedRoute";
+import { useAuthHandler } from "../hooks/useAuthHandler";
 
 const Login = () => {
-  useRedirectLoggedInUser();
+  useAuthHandler();
   const { signIn } = useFirebase();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -60,8 +65,8 @@ const Login = () => {
         ) : null}
 
         <StyledSubmit
-          name="Log In"
-          value="Log In"
+          label="Log In"
+          icon={<ArrowRightEndOnRectangleIcon />}
           onClick={async (e) => {
             e.preventDefault();
             const errors = await signIn(email, password);
@@ -75,7 +80,7 @@ const Login = () => {
         ) : null}
         {/* <p className="text-gray-700 text-sm">
           Don't have an account?{" "}
-          <a href="/signup" className="text-blue-500">
+          <a href="/signup" className="text-blue-700">
             Sign up
           </a>
         </p> */}

@@ -1,8 +1,9 @@
 import { Outlet } from "react-router-dom";
-import { Header, Sidebar } from "../widgets";
-import { useProtectedRoute } from "../hooks/useProtectedRoute";
+import { Sidebar } from "../widgets";
+import { useAuthHandler } from "../hooks/useAuthHandler";
 
 const Dashboard = () => {
+  useAuthHandler();
   return (
     <div className="flex flex-col w-full h-screen">
       {/* <Header /> */}
