@@ -32,7 +32,7 @@ export const MonthCalendar = () => {
           </div>
         ))}
       </div>
-      <div className="grid w-full h-full grid-cols-7 grid-rows-6 border-2 border-gray-700 rounded overflow-hidden">
+      <div className="grid w-full h-full grid-cols-7 grid-rows-6 border-2 border-gray-700 rounded overflow-hidden mb-16">
         {gridDates.map((currentDate, index) => (
           <DayCard
             key={`daycard__${currentDate.toUTCString()}`}
