@@ -5,9 +5,9 @@ import { Collection } from "../models/collection";
 import { DocumentData } from "firebase/firestore";
 
 export enum CalendarView {
-  Month,
-  Consecutive,
-  Rooms,
+  Month = "Month",
+  Consecutive = "Consecutive",
+  Rooms = "Rooms",
 }
 
 type CalendarProps = {
@@ -26,16 +26,16 @@ type CalendarProps = {
 
 const CalendarContext = React.createContext<CalendarProps>({
   view: CalendarView.Month,
-  setView: () => {},
+  setView: () => { },
   date: new DateManager(),
-  setDate: () => {},
+  setDate: () => { },
   bookings: [],
   bookingData: {},
-  setBookingData: () => {},
+  setBookingData: () => { },
   bookingModalOpen: false,
-  setBookingModalOpen: () => {},
+  setBookingModalOpen: () => { },
   hoveredBooking: "",
-  setHoveredBooking: () => {},
+  setHoveredBooking: () => { },
 });
 
 export const CalendarProvider = ({

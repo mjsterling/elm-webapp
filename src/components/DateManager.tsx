@@ -66,6 +66,10 @@ export class DateManager {
     return new DateManager(new Date(this.year, this.month, this.date + 1));
   }
 
+  fromDays(days: number) {
+    return new DateManager(new Date(days * 86.4e6));
+  }
+
   backOneMonth() {
     if (this.month === 0) {
       this.year -= 1;

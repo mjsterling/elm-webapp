@@ -22,7 +22,6 @@ export const DateRangePicker: DateRangePicker = ({
   endDate,
   setDates,
 }) => {
-  console.log(startDate);
 
   const dayOfStartDate = Math.floor((startDate?.getTime() ?? 0) / 86.4e6);
   const dayOfEndDate = Math.floor((endDate?.getTime() ?? 0) / 86.4e6);
@@ -36,16 +35,12 @@ export const DateRangePicker: DateRangePicker = ({
 
     const handleDateChange = () => {
       if (isEndDate) {
-        console.log("hit is end date");
         setDates({ startDate: currentDate, endDate: undefined });
       } else if (startDate === undefined || dayOfCurrentDate < dayOfStartDate) {
-        console.log("hit before start date");
         setDates({ startDate: currentDate });
       } else if (isStartDate) {
-        console.log("hit is start date");
         setDates({ startDate: undefined, endDate: undefined });
       } else if (startDate && dayOfCurrentDate > dayOfStartDate) {
-        console.log("is after start date");
         setDates({ endDate: currentDate });
       }
     };
@@ -88,7 +83,7 @@ export const DateRangePicker: DateRangePicker = ({
             alignmentBaseline="middle"
             fill={
               currentDate.getMonth() === date.month &&
-              currentDate.getDate() === date.date
+                currentDate.getDate() === date.date
                 ? "#00F"
                 : "#000"
             }

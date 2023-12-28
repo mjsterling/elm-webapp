@@ -21,14 +21,12 @@ export const DataTable = ({
           ? -1
           : 1
         : a[sort.key] > b[sort.key]
-        ? sort.ascending
-          ? 1
-          : -1
-        : 0
+          ? sort.ascending
+            ? 1
+            : -1
+          : 0
     );
   }, [sort.key, sort.ascending, data]);
-  console.table(sort);
-  console.table(sortedData);
   const HeaderCell = ({
     dbKey,
     label,
@@ -45,6 +43,7 @@ export const DataTable = ({
         index === 0 && "rounded-tl",
         index === Object.keys(headers).length - 1 && "rounded-tr"
       )}
+      style={{ gridColumn: index + 1 }}
       onClick={() =>
         setSort({
           key: dbKey,
@@ -53,7 +52,7 @@ export const DataTable = ({
       }
     >
       <div className="h-4 w-4" aria-hidden="true" />
-      {label}
+      <span className="text-center">{label}</span>
       <div className="h-4 w-4">
         {dbKey === sort.key ? (
           sort.ascending ? (
@@ -84,7 +83,7 @@ export const DataTable = ({
         row % 2 === 0 ? "bg-white" : "bg-blue-50",
         "py-2 px-3 flex items-center justify-center",
         row === (sortedData?.length ?? 0) - 1 &&
-          (col === 0 || col === Object.keys(headers).length - 1)
+        (col === 0 || col === Object.keys(headers).length - 1)
       )}
       style={{ gridColumn: Object.keys(headers)?.indexOf(dbKey) + 1 }}
     >
@@ -111,7 +110,7 @@ export const DataTable = ({
   if (!sortedData) return null;
   return (
     <div
-      className="grid"
+      className="grid max-w-full"
       style={
         {
           // gridTemplateColumns: `repeat(${
@@ -124,9 +123,10 @@ export const DataTable = ({
       {Object.entries(headers).map(([dbKey, label], index) => (
         <HeaderCell dbKey={dbKey} label={label} index={index} />
       ))}
-      {sortedData.map((datum, row) => (
+      {data.length ? sortedData.map((datum, row) => (
         <DataRow datum={datum} row={row} />
-      ))}
+      )) : <div className="bg-white flex justify-center items-center rounded-b p-2" style={{ gridColumn: `1 / span ${Object.keys(headers).length}` }}>
+        <span>Loading data...</span></div>}
     </div>
   );
 };

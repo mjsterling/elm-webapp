@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import {
   Dashboard,
   Login,
@@ -6,11 +6,19 @@ import {
   ManageUsers,
   Logout,
   Rooms,
+  ManageRoomTypes,
 } from "./routes";
 import { FirebaseProvider } from "./providers/FirebaseProvider";
+import { ConfirmModalProvider } from "./providers/ConfirmModalProvider";
 const router = createBrowserRouter([
   {
-    element: <FirebaseProvider />,
+    element: (
+      <FirebaseProvider>
+        <ConfirmModalProvider>
+          <Outlet />
+        </ConfirmModalProvider>
+      </FirebaseProvider>
+    ),
     children: [
       {
         path: "/",
@@ -28,6 +36,10 @@ const router = createBrowserRouter([
           {
             path: "rooms",
             element: <Rooms />,
+          },
+          {
+            path: "roomtypes",
+            element: <ManageRoomTypes />,
           },
         ],
       },

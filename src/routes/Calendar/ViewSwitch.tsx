@@ -24,20 +24,20 @@ export const ViewSwitch = () => {
         setView(viewFor);
       }}
       className={clsx(
-        "p-2",
         "gap-2 transition-colors bg-blue-700 rounded-full flex justify-center items-center",
         "border border-blue-700",
         viewFor === view
-          ? "bg-blue-700 text-white hover:bg-white hover:text-blue-700"
-          : "bg-white text-blue-700 hover:bg-blue-700 hover:text-white"
+          ? "bg-blue-700 text-white hover:bg-white hover:text-blue-700 py-2 px-4"
+          : "bg-white text-blue-700 hover:bg-blue-700 hover:text-white p-2"
       )}
     >
       <span className="h-6 w-6">{icon}</span>
+      {viewFor === view ? <span>{viewFor}</span> : ''}
     </button>
   );
 
   return (
-    <div className="absolute bottom-8 left-8 flex gap-2">
+    <div className="absolute top-4 right-4 flex gap-2">
       <SelfAwareFab viewFor={CalendarView.Month} icon={<CalendarDaysIcon />} />
       <SelfAwareFab
         viewFor={CalendarView.Consecutive}

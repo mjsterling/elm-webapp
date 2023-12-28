@@ -8,22 +8,19 @@ import {
   StyledButton,
   Modal,
   DateRangePicker,
-  ConfirmModalProps,
-  ConfirmModal,
 } from "../../components";
 import { useCalendarData } from "../../providers/CalendarProvider";
-import { useState } from "react";
 import { BookingDateDisplay } from "./BookingDateDisplay";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { BookingStatusDisplay } from "./BookingStatus";
+import { useConfirmModal } from "../../providers/ConfirmModalProvider";
 
 export const BookingModal = () => {
   const { bookingModalOpen, setBookingModalOpen, bookingData, setBookingData } =
     useCalendarData();
   const { create, update, destroy } = useCrud(Collection.bookings);
-  const [confirmModalProps, setConfirmModalProps] =
-    useState<ConfirmModalProps>();
-  const [_, setConfirmModalOpen] = useState(false);
+  const { confirm } = useConfirmModal();
+
   const setFormData =
     (field: keyof Booking) => (e: React.ChangeEvent<HTMLInputElement>) => {
       setBookingData({ ...bookingData, [field]: e.currentTarget.value });
@@ -152,17 +149,11 @@ export const BookingModal = () => {
             <StyledButton
               startIcon={<TrashIcon />}
               onClick={() => {
-                setConfirmModalProps({
-                  open: true,
-                  setOpen: setConfirmModalOpen,
+                confirm({
                   onConfirm: async () => {
-                    setConfirmModalProps(undefined);
                     setBookingData({});
-                    setBookingModalOpen(false);
                     await destroy(bookingData.id!);
-                  },
-                  onDecline: () => {
-                    setConfirmModalProps(undefined);
+                    setBookingModalOpen(false);
                   },
                   heading: "Confirm booking deletion",
                   body: `Are you sure you want to delete booking ${bookingData.id}?`,
@@ -175,7 +166,6 @@ export const BookingModal = () => {
           ) : null}
         </div>
       </Modal>
-      {confirmModalProps ? <ConfirmModal {...confirmModalProps} /> : null}
     </>
   );
 };

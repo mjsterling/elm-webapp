@@ -1,9 +1,11 @@
 import { useMemo } from "react";
 import { useCalendarData } from "../../providers/CalendarProvider";
 import { DayCard } from "./DayCard";
+import { DateManager } from "../../components";
+import { SvgChevronButton } from "../../components/SvgChevronButton";
 
 export const MonthCalendar = () => {
-  const { date } = useCalendarData();
+  const { date, setDate } = useCalendarData();
   const numRows = Math.ceil(
     (new Date(date.year, date.month, 1).getDay() + date.daysIn(date.month)) / 7
   );
@@ -22,17 +24,50 @@ export const MonthCalendar = () => {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="grid grid-cols-7 w-full my-2">
-        {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
-          <div
-            key={`calendarmain__dayofweek__${day}__${index}`}
-            className="font-semibold text-2xl w-full text-center"
+      <svg
+        viewBox="-5 -100 710 700"
+        className="h-full w-full min-h-full min-w-full"
+      >
+        <SvgChevronButton
+          size={20}
+          x={230}
+          y={-82}
+          direction="left"
+          onClick={() => setDate(date.backOneMonth())}
+        />
+
+        <text
+          textAnchor="middle"
+          alignmentBaseline="middle"
+          onClick={() => setDate(new DateManager())}
+          className="cursor-pointer select-none"
+          x={355}
+          y={-75}
+          fontSize={26}
+          fontWeight={500}
+        >
+          {date.monthAsFullString} {date.year}
+        </text>
+        <SvgChevronButton
+          size={20}
+          x={480}
+          y={-82}
+          direction="right"
+          onClick={() => setDate(date.forwardOneMonth())}
+        />
+        {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
+          <text
+            x={i * 100 + 50}
+            y={-20}
+            fontSize={24}
+            fontWeight={500}
+            alignmentBaseline="middle"
+            textAnchor="middle"
+            key={`calendarmain__dayofweek__${day}__${i}`}
           >
             {day}
-          </div>
+          </text>
         ))}
-      </div>
-      <div className="grid w-full h-full grid-cols-7 grid-rows-6 border-2 border-gray-700 rounded overflow-hidden mb-16">
         {gridDates.map((currentDate, index) => (
           <DayCard
             key={`daycard__${currentDate.toUTCString()}`}
@@ -40,7 +75,7 @@ export const MonthCalendar = () => {
             index={index}
           />
         ))}
-      </div>
+      </svg>
     </div>
   );
 };

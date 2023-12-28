@@ -12,6 +12,11 @@ interface Booking {
   pets: boolean;
   room: Room;
   startDate: Date;
+  statusReceivedDate?: Date;
+  statusConfirmedDate?: Date;
+  statusCheckedInDate?: Date;
+  statusCheckedOutDate?: Date;
+  statusRoomCleanedDate?: Date;
 }
 
 interface Room {

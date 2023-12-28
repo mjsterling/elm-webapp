@@ -6,16 +6,14 @@ import { StyledFab } from "../../components/StyledFAB";
 import { useCrud } from "../../hooks/useCrud";
 import { DataTable } from "../../components/DataTable";
 import { IconButton } from "../../components/IconButton";
-import { ConfirmModal, ConfirmModalProps } from "../../components/ConfirmModal";
 import { NewUserModal } from "./NewUserModal";
+import { useConfirmModal } from "../../providers/ConfirmModalProvider";
 
 const ManageUsers = () => {
+  const { confirm } = useConfirmModal();
   const users = useCollection(Collection.users);
   const { destroy } = useCrud(Collection.users);
   const [newUserModalOpen, setNewUserModalOpen] = useState(false);
-  const [_, setConfirmDeleteModalOpen] = useState(false);
-  const [confirmModalProps, setConfirmModalProps] =
-    useState<ConfirmModalProps>();
   const openNewUserModal = () => setNewUserModalOpen(true);
   const [data, setData] = useState<Partial<UserData>>({
     email: "",
@@ -43,12 +41,12 @@ const ManageUsers = () => {
         <DataTable
           headers={{
             email: "Email Address",
-            firstName: "First Name",
-            lastName: "Last Name",
+            name: "Name",
             actions: "Actions",
           }}
           data={users.map((user) => ({
-            ...user,
+            email: user.email,
+            name: user.firstName + " " + user.lastName,
             actions: (
               <div className="flex gap-1">
                 <IconButton
@@ -58,14 +56,10 @@ const ManageUsers = () => {
                 <IconButton
                   icon={<TrashIcon />}
                   onClick={() => {
-                    setConfirmModalProps({
-                      open: true,
-                      setOpen: setConfirmDeleteModalOpen,
+                    confirm({
                       onConfirm: () => {
                         destroy(user.id);
-                        setConfirmModalProps(undefined);
                       },
-                      onDecline: () => setConfirmModalProps(undefined),
                       heading: "Confirm User Deletion",
                       body: `Are you sure you wish to delete user ${user.firstName} ${user.lastName}?`,
                     });
@@ -79,7 +73,7 @@ const ManageUsers = () => {
           onClick={openNewUserModal}
           icon={<UserPlusIcon />}
           label="Add New User"
-          className="absolute right-8 bottom-8"
+          className="absolute right-4 bottom-4"
         />
       </div>
       <NewUserModal
@@ -88,7 +82,6 @@ const ManageUsers = () => {
         data={data}
         setData={setData}
       />
-      {confirmModalProps ? <ConfirmModal {...confirmModalProps} /> : null}
     </>
   );
 };

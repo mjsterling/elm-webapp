@@ -1,6 +1,7 @@
 import {
   ArrowLeftStartOnRectangleIcon,
   ArrowsRightLeftIcon,
+  BuildingOffice2Icon,
   BuildingOfficeIcon,
   CalendarDaysIcon,
   UserCircleIcon,
@@ -15,7 +16,7 @@ export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   return (
     <div
-      className="flex flex-col h-full w-60 fixed md:relative bg-white z-50 shadow transition-all p-2 justify-between"
+      className="flex flex-col h-full w-60 min-w-60 fixed md:relative bg-white z-50 shadow transition-all p-2 justify-between"
       style={{ marginLeft: collapsed ? "-230px" : "0" }}
     >
       <div className="flex flex-col">
@@ -35,6 +36,11 @@ export const Sidebar = () => {
             to="/rooms"
             icon={<BuildingOfficeIcon />}
             label="Manage Rooms"
+          />
+          <StyledNavLink
+            to="/roomtypes"
+            icon={<BuildingOffice2Icon />}
+            label="Manage Room Types"
           />
         </div>
       </div>

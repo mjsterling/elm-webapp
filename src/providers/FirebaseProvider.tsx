@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { Auth, getAuth, signInWithEmailAndPassword, User } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type LoginErrors = {
   email?: string;
@@ -27,7 +27,11 @@ type FirebaseProps = {
 
 const FirebaseContext = React.createContext<FirebaseProps | null>(null);
 
-export const FirebaseProvider = () => {
+export const FirebaseProvider = ({
+  children,
+}: {
+  children?: React.ReactNode;
+}) => {
   const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -85,7 +89,7 @@ export const FirebaseProvider = () => {
     <FirebaseContext.Provider
       value={{ app, db, auth, user: auth.currentUser, signIn, signOut }}
     >
-      <Outlet />
+      {children}
     </FirebaseContext.Provider>
   );
 };

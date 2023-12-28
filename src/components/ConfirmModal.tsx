@@ -1,9 +1,8 @@
+import { useConfirmModal } from "../providers/ConfirmModalProvider";
 import { Modal } from "./Modal";
 import { StyledButton } from "./StyledButton";
 
 export type ConfirmModalProps = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onConfirm: Function;
   onDecline?: Function;
   heading: string;
@@ -13,19 +12,19 @@ export type ConfirmModalProps = {
 type ConfirmModal = React.FC<ConfirmModalProps>;
 
 export const ConfirmModal: ConfirmModal = ({
-  open,
-  setOpen,
   onConfirm,
   onDecline,
   heading,
   body,
 }) => {
+  const { close } = useConfirmModal();
   return (
     <Modal
-      open={open}
-      setOpen={setOpen}
+      zIndex={1000}
+      open={true}
       onClose={() => {
         onDecline?.();
+        close();
       }}
       className="flex flex-col gap-2 border-2 border-red-600"
     >
@@ -38,6 +37,7 @@ export const ConfirmModal: ConfirmModal = ({
           theme="error"
           onClick={() => {
             onConfirm();
+            close();
           }}
           label="I said DO IT!"
         />
@@ -45,7 +45,7 @@ export const ConfirmModal: ConfirmModal = ({
           theme="primary"
           onClick={() => {
             onDecline?.();
-            setOpen(false);
+            close();
           }}
           label="Wait, nah..."
         />

@@ -5,7 +5,7 @@ import { useCalendarData } from "../../providers/CalendarProvider";
 import clsx from "clsx";
 import { BookingStatus } from "../../models/bookingStatus";
 
-export const RoomView = () => {
+export const RoomCalendar = () => {
   const rooms = useCollection(Collection.rooms);
   const { date, bookings } = useCalendarData();
   const todaysBookings = useMemo(
@@ -19,7 +19,7 @@ export const RoomView = () => {
   );
 
   return (
-    <div className="grid grid-cols-2 grid-rows-6 md:grid-cols-3 md:grid-rows-4 lg:grid-cols-4 lg:grid-rows-3 h-full w-full p-8 pb-24">
+    <div className="grid h-full p-4 pb-8 w-full overflow-y-auto" style={{ gridTemplateRows: 'repeat(auto-fit, minmax(300px, 1fr)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr)' }}>
       {rooms.map((room) => {
         const todaysBookingsForThisRoom = todaysBookings
           .filter((booking) => booking.room === room.roomNumber)
