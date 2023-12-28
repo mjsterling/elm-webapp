@@ -1,6 +1,14 @@
+interface Addon {
+  id: string;
+  name: string;
+  price: number;
+  type: "Flat" | "Per person";
+}
+
 interface Booking {
   id: string;
   status: import("./models/bookingStatus").BookingStatus;
+  addons: { name: string; count: number }[];
   contactEmail?: string;
   contactFirstName?: string;
   contactLastName?: string;
@@ -21,10 +29,9 @@ interface Booking {
 
 interface Room {
   id: string;
-  bookings: Booking[];
   petsAllowed: boolean;
   roomNumber: number;
-  roomType: RoomType;
+  roomType: string;
   wheelchairAccessible: boolean;
 }
 
@@ -39,7 +46,7 @@ interface RoomType {
   name: string;
   price_offpeak: number;
   price_peak: number;
-  rooms: Room[];
+  rooms: string[];
 }
 
 interface UserData {

@@ -4,6 +4,7 @@ import {
   BuildingOffice2Icon,
   BuildingOfficeIcon,
   CalendarDaysIcon,
+  PlusCircleIcon,
   UserCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
@@ -28,10 +29,11 @@ export const Sidebar = () => {
         <div className="w-full flex flex-col gap-1 my-4">
           <StyledNavLink to="/" icon={<CalendarDaysIcon />} label="Calendar" />
           <StyledNavLink
-            to="/users"
-            icon={<UserGroupIcon />}
-            label="Manage Users"
+            to="/addons"
+            icon={<PlusCircleIcon />}
+            label="Manage Addons"
           />
+
           <StyledNavLink
             to="/rooms"
             icon={<BuildingOfficeIcon />}
@@ -46,6 +48,11 @@ export const Sidebar = () => {
       </div>
       <div className="flex flex-col">
         <StyledNavLink
+          to="/users"
+          icon={<UserGroupIcon />}
+          label="Manage Users"
+        />
+        <StyledNavLink
           to="/account"
           icon={<UserCircleIcon />}
           label="Account Settings"
@@ -58,7 +65,7 @@ export const Sidebar = () => {
       </div>
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="block h-10 w-10 absolute flex justify-center items-center -right-5 top-[calc(50%_-_20px)] z-50 bg-white rounded-r-full border-r border-r-gray-200"
+        className=" h-10 w-10 absolute flex justify-center items-center -right-5 top-[calc(50%_-_20px)] z-50 bg-white rounded-r-full border-r border-r-gray-200"
       >
         <ArrowsRightLeftIcon className="h-4 w-4 text-gray-700" />
       </button>

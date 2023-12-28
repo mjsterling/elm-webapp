@@ -15,15 +15,6 @@ export const SvgChevronButton: SvgChevronButton = ({
   onClick,
 }) => (
   <>
-    <circle
-      r={size * 0.9}
-      cx={x}
-      cy={y + size / 4}
-      fill="transparent"
-      stroke="none"
-      className="cursor-pointer"
-      onClick={onClick}
-    />
     <path
       d={
         direction === "left"
@@ -38,6 +29,15 @@ export const SvgChevronButton: SvgChevronButton = ({
       stroke="black"
       strokeWidth="3"
       strokeLinecap="round"
+    />
+    <circle
+      r={size * 0.9}
+      cx={x}
+      cy={y + size / 4}
+      fill="transparent"
+      stroke="none"
+      className="cursor-pointer"
+      onClick={onClick}
     />
   </>
 );

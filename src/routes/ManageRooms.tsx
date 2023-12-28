@@ -1,4 +1,5 @@
 import {
+  CloudArrowUpIcon,
   PencilIcon,
   SquaresPlusIcon,
   TrashIcon,
@@ -7,10 +8,10 @@ import { useCollection, useCrud } from "../hooks";
 import { Collection } from "../models/collection";
 import { useState } from "react";
 import {
-  ConfirmModalProps,
   DataTable,
   IconButton,
   Modal,
+  StyledButton,
   StyledCheckbox,
   StyledFab,
   StyledInput,
@@ -24,9 +25,7 @@ import { StyledDropdown } from "../components/StyledDropdown";
 
 const Rooms = () => {
   const { confirm } = useConfirmModal();
-  const [roomData, setRoomData] = useState<
-    Partial<Omit<Room, "roomType"> & { roomType: string }>
-  >({});
+  const [roomData, setRoomData] = useState<Partial<Room>>({});
   const [newRoomModalOpen, setNewRoomModalOpen] = useState(false);
   const rooms = useCollection(Collection.rooms);
   const roomTypes = useCollection(Collection.roomtypes);
@@ -38,7 +37,7 @@ const Rooms = () => {
   };
   const headers = {
     roomNumber: "#",
-    type: "Type",
+    roomType: "Type",
     amenities: "Amenities",
     actions: "Actions",
   };
@@ -62,17 +61,17 @@ const Rooms = () => {
             roomNumber,
             roomType,
             amenities: (
-              <div className="flex gap-2">
+              <div className="flex gap-4">
                 <img
                   className={clsx(
-                    "h-5",
+                    "h-4",
                     petsAllowed ? "opacity-100" : "opacity-25"
                   )}
                   src={PawIcon}
                 />
                 <img
                   className={clsx(
-                    "h-5",
+                    "h-4",
                     wheelchairAccessible ? "opacity-100" : "opacity-25"
                   )}
                   src={WheelchairIcon}
@@ -115,6 +114,9 @@ const Rooms = () => {
         setOpen={setNewRoomModalOpen}
         title={roomData.id ? "Edit Room" : "New Room"}
       >
+        <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
+          Room Info
+        </h4>
         <StyledInput
           label="Room Number"
           value={roomData.roomNumber}
@@ -130,10 +132,12 @@ const Rooms = () => {
           options={roomTypes.map((type) => type.name)}
           value={roomData.roomType ?? ""}
           onSelect={(value) => {
-            console.log("value in onselect", value);
             setRoomData({ ...roomData, roomType: value });
           }}
         />
+        <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
+          Amenities
+        </h4>
         <StyledCheckbox
           label="Pets Allowed"
           checked={!!roomData.petsAllowed}
@@ -154,6 +158,44 @@ const Rooms = () => {
             })
           }
         />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <StyledButton
+            startIcon={<CloudArrowUpIcon />}
+            onClick={async () => {
+              if (roomData.id) {
+                await update(roomData).then(() => {
+                  setRoomData({});
+                  setNewRoomModalOpen(false);
+                });
+              } else {
+                await create(roomData).then(() => {
+                  setRoomData({});
+                  setNewRoomModalOpen(false);
+                });
+              }
+            }}
+            label={roomData.id ? "Update Room" : "Create Room"}
+          />
+          {roomData.id ? (
+            <StyledButton
+              startIcon={<TrashIcon />}
+              onClick={() => {
+                confirm({
+                  onConfirm: async () => {
+                    setRoomData({});
+                    await destroy(roomData.id!);
+                    setNewRoomModalOpen(false);
+                  },
+                  heading: "Confirm room deletion",
+                  body: `Are you sure you want to delete room ${roomData.roomNumber}?`,
+                });
+              }}
+              label="Delete Room"
+              theme="error"
+              mode="outlined"
+            />
+          ) : null}
+        </div>
       </Modal>
     </div>
   );

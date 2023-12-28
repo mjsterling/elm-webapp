@@ -1,6 +1,7 @@
 export enum Collection {
-  users = "users",
-  rooms = "rooms",
+  addons = "addons",
   bookings = "bookings",
+  rooms = "rooms",
   roomtypes = "roomtypes",
+  users = "users",
 }

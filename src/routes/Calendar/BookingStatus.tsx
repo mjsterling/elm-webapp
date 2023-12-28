@@ -59,7 +59,7 @@ export const BookingStatusDisplay = () => {
               });
             });
           }}
-          className="rounded-none"
+          className="rounded"
         />
         <span className="text-[10px] text-gray-700 w-full text-center">
           {bookingData[statusFieldMap[forStatus]]?.toLocaleString("en-AU", {
@@ -69,14 +69,14 @@ export const BookingStatusDisplay = () => {
             day: "numeric",
             hour: "numeric",
             minute: "2-digit",
-          }) ?? ""}
+          }) ?? <>&nbsp;</>}
         </span>
       </div>
     );
   };
 
   return bookingData.id ? (
-    <div className="grid grid-cols-5">
+    <div className="flex flex-wrap justify-center items-center gap-y-2">
       {Object.values(BookingStatus).map((_status, index) => {
         return <SelfAwareStatusButton forStatus={_status} index={index} />;
       })}

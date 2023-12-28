@@ -11,15 +11,18 @@ import {
 } from "../../components";
 import { useCalendarData } from "../../providers/CalendarProvider";
 import { BookingDateDisplay } from "./BookingDateDisplay";
-import { TrashIcon } from "@heroicons/react/24/solid";
+import { TrashIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { BookingStatusDisplay } from "./BookingStatus";
 import { useConfirmModal } from "../../providers/ConfirmModalProvider";
+import { useCollection } from "../../hooks";
+import { StyledDropdown } from "../../components/StyledDropdown";
 
 export const BookingModal = () => {
   const { bookingModalOpen, setBookingModalOpen, bookingData, setBookingData } =
     useCalendarData();
   const { create, update, destroy } = useCrud(Collection.bookings);
   const { confirm } = useConfirmModal();
+  const addons = useCollection(Collection.addons);
 
   const setFormData =
     (field: keyof Booking) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +54,9 @@ export const BookingModal = () => {
         <div className="flex justify-center">
           <BookingStatusDisplay />
         </div>
+        <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
+          Dates
+        </h4>
         <div className="flex justify-center">
           <BookingDateDisplay
             startDate={bookingData.startDate}
@@ -66,6 +72,9 @@ export const BookingModal = () => {
             }}
           />
         </div>
+        <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
+          Customer Information
+        </h4>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <StyledInput
             label="First Name"
@@ -90,6 +99,9 @@ export const BookingModal = () => {
             onChange={setFormData("contactPhone")}
           />
         </div>
+        <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
+          Booking Details
+        </h4>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <PlusMinusSelector
             label="Number of Adults"
@@ -110,9 +122,9 @@ export const BookingModal = () => {
             }}
           />
         </div>
-        <div className="grid grid-cols-2 gap-4 flex-col md:flex-row">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <StyledCheckbox
-            label="Pets?"
+            label="Has pets?"
             checked={bookingData.pets ?? false}
             onChange={() => {
               setBookingData({ ...bookingData, pets: !bookingData.pets });
@@ -126,8 +138,78 @@ export const BookingModal = () => {
             />
           ) : null}
         </div>
+        <StyledDropdown
+          label="Add addon"
+          placeholder="Search for addon..."
+          value=""
+          options={addons
+            .filter(
+              (addon) =>
+                !bookingData.addons?.find(
+                  (_addon) => _addon.name === addon.name
+                )
+            )
+            .map((addon) => addon.name)}
+          onSelect={(value) => {
+            if (!bookingData.addons?.find(({ name }) => name === value)) {
+              setBookingData({
+                ...bookingData,
+                addons: [
+                  ...(bookingData.addons ?? []),
+                  { name: value, count: 0 },
+                ],
+              });
+            }
+          }}
+        />
+        {(bookingData.addons ?? []).map((addon, index) => (
+          <div className="flex gap-4 items-center">
+            <PlusMinusSelector
+              label={addon.name}
+              value={addon.count}
+              setValue={(value) => {
+                setBookingData((data) => {
+                  const newAddons = [...(data.addons ?? [])];
+                  const addonIndex = newAddons.findIndex(
+                    (_addon) => _addon.name === addon.name
+                  );
+                  const newAddon = {
+                    name: newAddons[addonIndex].name,
+                    count: value,
+                  };
+                  return {
+                    ...data,
+                    addons: [
+                      ...newAddons.slice(0, addonIndex),
+                      newAddon,
+                      ...newAddons.slice(addonIndex + 1),
+                    ],
+                  };
+                });
+              }}
+            />
+            <XMarkIcon
+              className="h-6 w-6 cursor-pointer mt-5"
+              onClick={() => {
+                setBookingData((data) => {
+                  const oldAddons = data.addons ?? [];
+                  if (oldAddons.length === 0) {
+                    return { ...data, addons: oldAddons };
+                  }
 
-        <div className="grid grid-cols-2 gap-4 flex-col md:flex-row">
+                  return {
+                    ...data,
+                    addons: [
+                      ...oldAddons.slice(0, index),
+                      ...oldAddons.slice(index + 1),
+                    ],
+                  };
+                });
+              }}
+            />
+          </div>
+        ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <StyledButton
             startIcon={<CloudArrowUpIcon />}
             onClick={async () => {

@@ -136,6 +136,9 @@ const ManageRoomTypes = () => {
         setOpen={setNewRoomModalOpen}
         title={roomData.id ? "Edit Room Type" : "New Room Type"}
       >
+        <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
+          Room Type
+        </h4>
         <StyledInput
           label="Room Type Name"
           value={roomData.name}
@@ -156,9 +159,9 @@ const ManageRoomTypes = () => {
             })
           }
         />
-        <div className="flex w-full justify-center">
-          <h4 className="font-semibold py-2">Bed Information</h4>
-        </div>
+        <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
+          Beds
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <PlusMinusSelector
             label="Total Capacity"

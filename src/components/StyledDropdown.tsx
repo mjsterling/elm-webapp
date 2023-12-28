@@ -11,15 +11,17 @@ type StyledDropdownProps = {
   options: string[];
   onSelect(option: string): void;
   label?: string;
+  placeholder?: string;
 };
 
 export const StyledDropdown: React.FC<StyledDropdownProps> = ({
   value,
   options,
   onSelect,
+  placeholder,
   label,
 }) => {
-  const [localValue, setLocalValue] = useState(value);
+  const [localValue, setLocalValue] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -66,6 +68,7 @@ export const StyledDropdown: React.FC<StyledDropdownProps> = ({
     <div className="relative flex">
       <StyledInput
         label={label}
+        placeholder={placeholder}
         onFocus={() => setDropdownOpen(true)}
         endIcon={
           dropdownOpen ? (

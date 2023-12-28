@@ -6,6 +6,7 @@ import {
   ManageUsers,
   Logout,
   Rooms,
+  ManageAddons,
   ManageRoomTypes,
 } from "./routes";
 import { FirebaseProvider } from "./providers/FirebaseProvider";
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
           {
             path: "users",
             element: <ManageUsers />,
+          },
+          {
+            path: "addons",
+            element: <ManageAddons />,
           },
           {
             path: "rooms",
