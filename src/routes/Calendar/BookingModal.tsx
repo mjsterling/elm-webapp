@@ -16,10 +16,18 @@ import { BookingStatusDisplay } from "./BookingStatus";
 import { useConfirmModal } from "../../providers/ConfirmModalProvider";
 import { useCollection } from "../../hooks";
 import { StyledDropdown } from "../../components/StyledDropdown";
+import { useMemo } from "react";
+import clsx from "clsx";
+import { daysSinceEpoch } from "../../utils/dateUtils";
 
 export const BookingModal = () => {
-  const { bookingModalOpen, setBookingModalOpen, bookingData, setBookingData } =
-    useCalendarData();
+  const {
+    bookings,
+    bookingModalOpen,
+    setBookingModalOpen,
+    bookingData,
+    setBookingData,
+  } = useCalendarData();
   const { create, update, destroy } = useCrud(Collection.bookings);
   const { confirm } = useConfirmModal();
   const addons = useCollection(Collection.addons);
@@ -29,12 +37,34 @@ export const BookingModal = () => {
       setBookingData({ ...bookingData, [field]: e.currentTarget.value });
     };
 
-  // const rooms = useCollection(Collection.rooms);
+  const rooms = useCollection(Collection.rooms);
+  const sortedRooms = useMemo(
+    () => [...rooms].sort((a, b) => a.roomNumber - b.roomNumber),
+    [rooms]
+  );
 
-  // const availableRoomsForDates = () =>
-  //   useMemo(() => {
-  //     return bookings.filter((booking) => true);
-  //   }, [rooms, bookings]);
+  const isRoomAvailableForDates = (room: Room) => {
+    const bookingsForRoom = bookings.filter(
+      (booking) => booking.room === room.roomNumber
+    );
+    for (const booking of bookingsForRoom) {
+      if (
+        booking.endDateAsDays >= daysSinceEpoch(bookingData.startDate) ||
+        booking.startDateAsDays <= daysSinceEpoch(bookingData.endDate)
+      ) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const roomsWithAvailability = useMemo(() => {
+    console.log("recalculating availability");
+    return [...sortedRooms].map((room) => ({
+      ...(room as Room),
+      available: isRoomAvailableForDates(room as Room),
+    }));
+  }, [sortedRooms, bookingData.startDate, bookingData.endDate]);
 
   return (
     <>
@@ -53,6 +83,31 @@ export const BookingModal = () => {
       >
         <div className="flex justify-center">
           <BookingStatusDisplay />
+        </div>
+        {/* Room Select */}
+        <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
+          Room
+        </h4>
+        <div className="flex py-4 flex-wrap gap-3 justify-center items-center">
+          {roomsWithAvailability.map((room) => (
+            <button
+              className={clsx(
+                "rounded-full h-10 w-10 transition-colors text-lg font-semibold",
+                room.available &&
+                  !(bookingData.room === room.roomNumber) &&
+                  "border border-blue-700 text-blue-700 bg-white hover:bg-blue-700 hover:text-white",
+                !room.available &&
+                  !(bookingData.room === room.roomNumber) &&
+                  "border border-gray-500 text-gray-500 bg-white",
+                bookingData.room === room.roomNumber && "bg-blue-700 text-white"
+              )}
+              onClick={() =>
+                setBookingData({ ...bookingData, room: room.roomNumber })
+              }
+            >
+              {room.roomNumber}
+            </button>
+          ))}
         </div>
         <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
           Dates
@@ -209,6 +264,7 @@ export const BookingModal = () => {
             />
           </div>
         ))}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <StyledButton
             startIcon={<CloudArrowUpIcon />}
@@ -219,7 +275,10 @@ export const BookingModal = () => {
                   setBookingModalOpen(false);
                 });
               } else {
-                await create(bookingData).then(() => {
+                await create({
+                  ...bookingData,
+                  statusReceivedDate: new Date(),
+                }).then(() => {
                   setBookingData({});
                   setBookingModalOpen(false);
                 });

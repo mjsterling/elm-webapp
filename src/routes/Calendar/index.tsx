@@ -12,11 +12,10 @@ import { MonthCalendar } from "./MonthCalendar";
 import { RoomCalendar } from "./RoomCalendar";
 
 const CalendarWidget = () => {
-  const { view, setBookingModalOpen } = useCalendarData();
+  const { view, setBookingModalOpen, setBookingData } = useCalendarData();
 
   return (
     <div className="flex flex-col w-full h-full justify-center items-center bg-gray-100 relative p-8">
-
       <CalendarHeader />
       <div className="w-full h-full">
         {view === CalendarView.Month ? <MonthCalendar /> : null}
@@ -25,7 +24,10 @@ const CalendarWidget = () => {
       </div>
       <BookingModal />
       <StyledFab
-        onClick={() => setBookingModalOpen(true)}
+        onClick={() => {
+          setBookingData({});
+          setBookingModalOpen(true);
+        }}
         icon={<SquaresPlusIcon />}
         label="Add New Booking"
         className="absolute right-4 bottom-4"

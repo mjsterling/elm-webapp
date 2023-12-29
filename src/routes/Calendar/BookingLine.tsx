@@ -10,7 +10,11 @@ type BookingLineProps = {
 };
 
 type BookingLine = React.FC<BookingLineProps>;
-export const BookingLine: BookingLine = ({ booking, currentDate, cellIndex }) => {
+export const BookingLine: BookingLine = ({
+  booking,
+  currentDate,
+  cellIndex,
+}) => {
   const {
     hoveredBooking,
     setHoveredBooking,
@@ -18,26 +22,32 @@ export const BookingLine: BookingLine = ({ booking, currentDate, cellIndex }) =>
     setBookingModalOpen,
   } = useCalendarData();
   const currentDateAsDays = daysSinceEpoch(currentDate);
-  const cellPosX = cellIndex % 7 * 100;
+  const cellPosX = (cellIndex % 7) * 100;
   const cellPosY = Math.floor(cellIndex / 7) * 100;
 
-  const roomNumber = booking.room?.roomNumber ?? 0;
+  const roomNumber = booking.room ?? 0;
   const lineColor =
     hoveredBooking === booking.id
       ? "black"
       : roomNumber === 0
-        ? "#555"
-        : lineColors[roomNumber - 1];
+      ? "#555"
+      : lineColors[roomNumber - 1];
   const startDateAsDays = daysSinceEpoch(booking.startDate);
   const endDateAsDays = daysSinceEpoch(booking.endDate);
   const isStartDate = startDateAsDays === currentDateAsDays;
   const isEndDate = endDateAsDays === currentDateAsDays;
   const isBetweenDate =
     currentDateAsDays > startDateAsDays && currentDateAsDays < endDateAsDays;
+  console.table({
+    date: currentDate.toLocaleDateString("en-AU"),
+    isStartDate,
+    isBetweenDate,
+    isEndDate,
+  });
   const lineYStart = cellPosY + 2 + Math.round((roomNumber - 1) * 8);
   return (
     <g
-      className={clsx("cursor-pointer")}
+      className={clsx("cursor-pointer opacity-70")}
       onMouseOver={() => setHoveredBooking(booking.id)}
       onMouseOut={() => setHoveredBooking("")}
       onClick={() => {
@@ -49,7 +59,9 @@ export const BookingLine: BookingLine = ({ booking, currentDate, cellIndex }) =>
       {isStartDate ? (
         <>
           <path
-            d={`M ${cellPosX + 100},${lineYStart} h -19.7 a 6,6 0 1 0 0,6 h 19.7 Z`}
+            d={`M ${
+              cellPosX + 100
+            },${lineYStart} h -19.7 a 6,6 0 1 0 0,6 h 19.7 Z`}
             fill={lineColor}
           />
           <circle
@@ -63,7 +75,7 @@ export const BookingLine: BookingLine = ({ booking, currentDate, cellIndex }) =>
             alignmentBaseline="middle"
             className="select-none"
             textAnchor="middle"
-            x={75}
+            x={cellPosX + 75}
             y={lineYStart + 3.7}
             fontSize={6}
             fontWeight={700}
@@ -74,11 +86,14 @@ export const BookingLine: BookingLine = ({ booking, currentDate, cellIndex }) =>
         </>
       ) : null}
       {isBetweenDate ? (
-        <path d={`M${cellPosX},${lineYStart} h 100 v 6 h -100 Z`} fill={lineColor} />
+        <path
+          d={`M${cellPosX},${lineYStart} h 100 v 6 h -100 Z`}
+          fill={lineColor}
+        />
       ) : null}
       {isEndDate ? (
         <path
-          d={`M ${cellPosX},${lineYStart} h 125 a 3,3 0 0 1 0,6 h -125 Z`}
+          d={`M ${cellPosX},${lineYStart} h 25 a 3,3 0 0 1 0,6 h -25 Z`}
           fill={lineColor}
         />
       ) : null}
@@ -86,7 +101,7 @@ export const BookingLine: BookingLine = ({ booking, currentDate, cellIndex }) =>
   );
 };
 
-const lineColors = [
+export const lineColors = [
   "#ff0000",
   "#ff8000",
   "#ffff00",

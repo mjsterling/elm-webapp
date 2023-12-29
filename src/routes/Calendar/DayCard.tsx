@@ -37,30 +37,21 @@ export const DayCard: DayCard = ({ currentDate, index }) => {
   const isCurrentMonth = currentDate.getMonth() === date.month;
   const isCurrentDate = currentDateAsDays === daysSinceEpoch(new Date());
 
-  const cellPosX = index % 7 * 100;
-  const cellPosY = Math.floor(index / 7) * 100
+  const cellPosX = (index % 7) * 100;
+  const cellPosY = Math.floor(index / 7) * 100;
   return (
     <>
       <rect
-        fill={isCurrentDate
-          ? "#E7F7FF"
-          : isCurrentMonth
-            ? "white"
-            : "#f3f3f3"
-        }
-        stroke="rgb(55 65 81)" strokeWidth={2} x={cellPosX} y={cellPosY}
-
-        width="100" height="100"
-      // className="h-full w-full left-0 top-0"
-      // style={index % 7 === 0 ? { marginTop: "-1px" } : {}}
+        fill={isCurrentDate ? "#E7F7FF" : isCurrentMonth ? "white" : "#f3f3f3"}
+        stroke="rgb(55 65 81)"
+        strokeWidth={2}
+        x={cellPosX}
+        y={cellPosY}
+        width="100"
+        height="100"
+        // className="h-full w-full left-0 top-0"
+        // style={index % 7 === 0 ? { marginTop: "-1px" } : {}}
       />
-      {
-        todaysBookings.length
-          ? todaysBookings.map((booking) => (
-            <BookingLine cellIndex={index} booking={booking} currentDate={currentDate} />
-          ))
-          : null
-      }
       <text
         className="select-none"
         x={cellPosX + 50}
@@ -78,8 +69,16 @@ export const DayCard: DayCard = ({ currentDate, index }) => {
         }
       >
         {currentDate.getDate()}
-      </text>
+      </text>{" "}
+      {todaysBookings.length
+        ? todaysBookings.map((booking) => (
+            <BookingLine
+              cellIndex={index}
+              booking={booking}
+              currentDate={currentDate}
+            />
+          ))
+        : null}
     </>
-
   );
 };

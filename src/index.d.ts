@@ -18,7 +18,7 @@ interface Booking {
   numChildren: number;
   petDescription?: string;
   pets: boolean;
-  room: Room;
+  room: number;
   startDate: Date;
   statusReceivedDate?: Date;
   statusConfirmedDate?: Date;
