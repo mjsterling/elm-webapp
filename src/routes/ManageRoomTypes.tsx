@@ -25,7 +25,7 @@ const ManageRoomTypes = () => {
   const [roomData, setRoomData] = useState<Partial<RoomType>>({});
   const [newRoomModalOpen, setNewRoomModalOpen] = useState(false);
   const roomTypes = useCollection(Collection.roomtypes);
-  const { create, update, destroy } = useCrud(Collection.roomtypes);
+  const { create, update } = useCrud(Collection.roomtypes);
 
   const calculateCapacity = () =>
     [

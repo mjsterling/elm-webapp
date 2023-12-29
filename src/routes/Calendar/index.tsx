@@ -15,7 +15,7 @@ const CalendarWidget = () => {
   const { view, setBookingModalOpen, setBookingData } = useCalendarData();
 
   return (
-    <div className="flex flex-col w-full h-full justify-center items-center bg-gray-100 relative p-8">
+    <div className="flex flex-col w-full h-full justify-center items-center bg-gray-100 relative p-4 md:p-8">
       <CalendarHeader />
       <div className="w-full h-full">
         {view === CalendarView.Month ? <MonthCalendar /> : null}

@@ -64,7 +64,12 @@ export const BookingModal = () => {
       ...(room as Room),
       available: isRoomAvailableForDates(room as Room),
     }));
-  }, [sortedRooms, bookingData.startDate, bookingData.endDate]);
+  }, [
+    sortedRooms,
+    bookingData.startDate,
+    bookingData.endDate,
+    isRoomAvailableForDates,
+  ]);
 
   return (
     <>

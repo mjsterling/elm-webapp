@@ -96,7 +96,7 @@ export const useBookingDrag = () => {
     }
   };
 
-  const handleContainerMouseUp = (e: React.MouseEvent<SVGSVGElement>) => {
+  const handleContainerMouseUp = () => {
     if (!bookingDrag.dragging) return;
     if (
       bookingDrag.movePx &&

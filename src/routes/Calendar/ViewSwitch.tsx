@@ -32,17 +32,17 @@ export const ViewSwitch = () => {
       )}
     >
       <span className="h-6 w-6">{icon}</span>
-      {viewFor === view ? <span>{viewFor}</span> : ''}
+      {viewFor === view ? <span>{viewFor}</span> : ""}
     </button>
   );
 
   return (
     <div className="absolute top-4 right-4 flex gap-2">
-      <SelfAwareFab viewFor={CalendarView.Month} icon={<CalendarDaysIcon />} />
       <SelfAwareFab
         viewFor={CalendarView.Consecutive}
         icon={<TableCellsIcon />}
       />
+      <SelfAwareFab viewFor={CalendarView.Month} icon={<CalendarDaysIcon />} />
       <SelfAwareFab viewFor={CalendarView.Rooms} icon={<HomeIcon />} />
     </div>
   );

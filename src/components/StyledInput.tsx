@@ -5,7 +5,7 @@ type StyledInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   endIcon?: JSX.Element;
   label?: string;
   error?: string;
-  required?: boolean;
+  // required?: boolean;
 };
 
 type StyledInput = React.FC<StyledInputProps>;
@@ -13,7 +13,7 @@ export const StyledInput: StyledInput = ({
   label,
   startIcon,
   endIcon,
-  required = false,
+  // required = false,
   className,
   ...props
 }) => {

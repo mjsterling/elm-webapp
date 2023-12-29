@@ -8,7 +8,7 @@ const Logout = () => {
   useEffect(() => {
     auth.signOut();
     navigate("/login");
-  }, []);
+  }, [auth, navigate]);
   return null;
 };
 

@@ -50,7 +50,7 @@ export const BookingStatusDisplay = () => {
               id: bookingData.id,
               status: forStatus,
               [statusFieldMap[forStatus]]: prevDateIfAny ?? new Date(),
-            }).catch((e) => {
+            }).catch(() => {
               setBookingData({
                 ...bookingData,
                 status: prevStatus,
@@ -62,7 +62,7 @@ export const BookingStatusDisplay = () => {
         />
         <span className="text-[10px] text-gray-700 w-full text-center">
           {bookingData[statusFieldMap[forStatus]]?.toLocaleString("en-AU", {
-            // @ts-expect-error
+            // @ts-expect-error This says it's not a thing but it absolutely is
             year: "2-digit",
             month: "numeric",
             day: "numeric",

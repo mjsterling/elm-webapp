@@ -1,8 +1,7 @@
 // @@index('./*', f => `export * from '${f.path}'`)
 export * from "./ConfirmModal";
 export * from "./DataTable";
-export * from "./DateManager";
-export * from "./DateRangePicker";
+export { DateRangePicker } from "./DateRangePicker";
 export * from "./IconButton";
 export * from "./Modal";
 export * from "./PlusMinusSelector";

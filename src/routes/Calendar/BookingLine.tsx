@@ -2,6 +2,8 @@ import type { DocumentData } from "firebase/firestore";
 import { useCalendarData } from "../../providers/CalendarProvider";
 import { daysSinceEpoch } from "../../utils/dateUtils";
 import clsx from "clsx";
+import { statusColors } from "../../utils/statusColors";
+import { BookingStatus } from "../../models/bookingStatus";
 
 type BookingLineProps = {
   booking: DocumentData;
@@ -34,7 +36,9 @@ export const BookingLine: BookingLine = ({
 
   return (booking.rooms ?? []).map((roomNumber: number) => {
     const lineColor =
-      hoveredBooking === booking.id ? "black" : lineColors[roomNumber - 1];
+      hoveredBooking === booking.id
+        ? "black"
+        : statusColors[booking.status as BookingStatus];
     const lineYStart = cellPosY + 2 + Math.round((roomNumber - 1) * 8);
     return (
       <g

@@ -143,7 +143,7 @@ const Rooms = () => {
           onChange={() =>
             setRoomData({
               ...roomData,
-              petsAllowed: !!!roomData.petsAllowed,
+              petsAllowed: !roomData.petsAllowed,
             })
           }
         />
@@ -153,7 +153,7 @@ const Rooms = () => {
           onChange={() =>
             setRoomData({
               ...roomData,
-              wheelchairAccessible: !!!roomData.wheelchairAccessible,
+              wheelchairAccessible: !roomData.wheelchairAccessible,
             })
           }
         />

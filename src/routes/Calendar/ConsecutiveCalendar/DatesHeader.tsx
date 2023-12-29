@@ -1,5 +1,4 @@
-import { setDate } from "date-fns";
-import { DateManager } from "../../../components";
+import { Dayjs } from "dayjs";
 import { SvgChevronButton } from "../../../components/SvgChevronButton";
 import { useCalendarData } from "../../../providers/CalendarProvider";
 
@@ -7,11 +6,10 @@ export const DatesHeader = ({
   dates,
   numDays,
 }: {
-  dates: number[];
+  dates: Dayjs[];
   numDays: number;
 }) => {
   const { date, setDate } = useCalendarData();
-  const viewMidpoint = date.asDays + 1;
 
   return (
     <>
@@ -20,26 +18,21 @@ export const DatesHeader = ({
         x={-50}
         y={-58}
         size={20}
-        onClick={() => setDate(date.backOneDay())}
+        onClick={() => setDate(date.subtract(1, "day"))}
       />
-      {dates.map((date, i) => {
-        console.log(new Date(date * 86.4e6).toLocaleDateString("en-AU"));
+      {dates.map((_date, i) => {
         return (
           <>
             <text
-              onClick={() => setDate(new DateManager().fromDays(date))}
+              onClick={() => setDate(_date)}
               className="cursor-pointer"
-              fontWeight={date === viewMidpoint ? 700 : 500}
+              fontWeight={date.isSame(_date, "day") ? 700 : 500}
               x={50 + 100 * i}
               y={-50}
               textAnchor="middle"
               alignmentBaseline="middle"
             >
-              {new Date(date * 86.4e6).toLocaleDateString("en-AU", {
-                // year: undefined,
-                month: "short",
-                day: "numeric",
-              })}
+              {date.format("MMM YY")}
             </text>
           </>
         );
@@ -49,7 +42,7 @@ export const DatesHeader = ({
         x={50 + numDays * 100}
         y={-58}
         size={20}
-        onClick={() => setDate(date.forwardOneDay())}
+        onClick={() => setDate(date.add(1, "day"))}
       />
     </>
   );

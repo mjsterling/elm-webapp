@@ -11,12 +11,12 @@ import { useFirebase } from "../providers/FirebaseProvider";
 export const useCrud = (collection: Collection) => {
   const { db } = useFirebase();
   const collectionRef = getCollection(db, collection);
-  const create = async (fields: any) => {
+  const create = async (fields: { [key: string]: any }) => {
     await addDoc(collectionRef, {
       ...fields,
     });
   };
-  const update = async (fields: any) => {
+  const update = async (fields: { [key: string]: any }) => {
     const { id, ...restData } = fields;
     if (id) {
       await updateDoc(doc(db, collection, id), { ...restData });

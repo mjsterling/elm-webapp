@@ -34,7 +34,7 @@ export const RoomCalendar = () => {
               (booking.rooms ?? []).includes(room.roomNumber)
             )
             .sort((a, b) => a.endDateAsDays - b.endDateAsDays);
-          const [currentBooking, _] = todaysBookingsForThisRoom;
+          const [currentBooking] = todaysBookingsForThisRoom;
           return (
             <div
               className={clsx(

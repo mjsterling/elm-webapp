@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "react";
-import { useCollection, useCrud } from "../../../hooks";
+import { useCollection } from "../../../hooks";
 import { Collection } from "../../../models/collection";
 import { useCalendarData } from "../../../providers/CalendarProvider";
 import { BookingStatus } from "../../../models/bookingStatus";
@@ -8,6 +8,8 @@ import { useBookingDrag } from "./useBookingDrag";
 import { useNumDays } from "./useNumDays";
 import { DatesHeader } from "./DatesHeader";
 import { UserIcon } from "./UserIcon";
+import { statusColors } from "../../../utils/statusColors";
+import dayjs from "dayjs";
 
 export const ConsecutiveCalendar = () => {
   const {
@@ -24,17 +26,17 @@ export const ConsecutiveCalendar = () => {
 
   const cellWidth = 100;
   const cellHeight = 70;
-  const viewStartDate = date.asDays - Math.floor(numDays / 2);
-  const dates = Array.from(new Array(numDays).keys()).map(
-    (n) => n + viewStartDate + 1
+  const viewStartDate = date.subtract(Math.floor(numDays / 2), "days");
+  const dates = Array.from(new Array(numDays).keys()).map((n) =>
+    viewStartDate.add(n, "days")
   );
-  console.log(dates);
+  const viewEndDate = dates[dates.length - 1];
   const bookingsForDateRange = useMemo(
     () =>
       bookings.filter(
         (booking) =>
-          booking.startDateAsDays <= date.asDays + numDays / 2 ||
-          booking.endDateAsDays >= date.asDays - numDays / 2
+          dayjs(booking.startDate).isBefore(viewEndDate.add(1, "day")) ||
+          dayjs(booking.endDate).isAfter(viewStartDate.subtract(1, "day"))
       ),
     [bookings, date, numDays]
   );
@@ -48,14 +50,6 @@ export const ConsecutiveCalendar = () => {
     handleContainerMouseUp,
     resetBookingDrag,
   } = useBookingDrag();
-
-  const statusColors: { [P in BookingStatus]: string } = {
-    [BookingStatus.received]: "#4E516C",
-    [BookingStatus.confirmed]: "#3E538C",
-    [BookingStatus.checkedIn]: "#1D4ED8",
-    [BookingStatus.checkedOut]: "#741B61",
-    [BookingStatus.roomCleaned]: "#036834",
-  };
 
   return (
     <div className="w-full h-full max-h-full max-w-full py-8 flex justify-center items-center">
@@ -132,8 +126,12 @@ export const ConsecutiveCalendar = () => {
               )}
               onClick={() => {
                 setBookingData({
-                  startDate: new Date((dates[0] + (index % numDays)) * 86.4e6),
-                  endDate: new Date((dates[1] + (index % numDays)) * 86.4e6),
+                  startDate: viewStartDate
+                    .add(index % (numDays - 1), "days")
+                    .toDate(),
+                  endDate: viewStartDate
+                    .add((index % (numDays - 1)) + 1, "days")
+                    .toDate(),
                   rooms: [Math.floor(index / (numDays - 1)) + 1],
                 });
                 setBookingModalOpen(true);
@@ -162,7 +160,7 @@ export const ConsecutiveCalendar = () => {
                   cellHeight * 0.5
                 }
               >
-                +
+                {index}
               </text>
             </g>
           )
@@ -190,7 +188,7 @@ export const ConsecutiveCalendar = () => {
               ((bookingDrag.dragging && bookingDrag.booking?.id === booking.id
                 ? bookingDrag.start || booking.startDateAsDays
                 : booking.startDateAsDays) -
-                dates[0]) *
+                viewStartDate.millisecond() / 86.4e6) *
                 100;
             const width = (bookingLengthDays - 1) * cellWidth + cellWidth * 0.8;
             const height = cellHeight * 0.8;
@@ -201,9 +199,9 @@ export const ConsecutiveCalendar = () => {
                 ? `${booking.contactFirstName} ${booking.contactLastName}`
                 : booking.contactLastName ?? booking.contactFirstName;
 
-            const statusAsNumber = Object.values(BookingStatus).indexOf(
-              booking.status
-            );
+            // const statusAsNumber = Object.values(BookingStatus).indexOf(
+            //   booking.status
+            // );
 
             return (booking.rooms ?? [booking.room]).map(
               (roomNumber: number) => {
@@ -322,7 +320,7 @@ export const ConsecutiveCalendar = () => {
                       onMouseDown={(e) => {
                         if (!tableRef.current) return;
                         const { left, right } =
-                          tableRef.current?.getBoundingClientRect();
+                          tableRef.current.getBoundingClientRect();
                         setBookingDrag({
                           dragging: true,
                           booking: { ...booking },
@@ -354,7 +352,7 @@ export const ConsecutiveCalendar = () => {
                       onMouseDown={(e) => {
                         if (!tableRef.current) return;
                         const { left, right } =
-                          tableRef.current?.getBoundingClientRect();
+                          tableRef.current.getBoundingClientRect();
                         setBookingDrag({
                           dragging: true,
                           movePx: 0,
@@ -381,7 +379,7 @@ export const ConsecutiveCalendar = () => {
                       onMouseDown={(e) => {
                         if (!tableRef.current) return;
                         const { left, right } =
-                          tableRef.current?.getBoundingClientRect();
+                          tableRef.current.getBoundingClientRect();
                         setBookingDrag({
                           dragging: true,
                           movePx: e.clientX,

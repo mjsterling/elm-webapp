@@ -9,7 +9,7 @@ export const useNumDays = () => {
     });
   }, []);
   useEffect(() => {
-    const newNumDays = Math.floor(windowInnerWidth / 100);
+    const newNumDays = Math.floor(windowInnerWidth / 80);
     setNumDays(Math.max(5, newNumDays + (newNumDays % 2 === 0 ? 1 : 0)));
   }, [windowInnerWidth]);
 

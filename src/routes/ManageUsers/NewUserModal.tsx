@@ -51,10 +51,10 @@ export const NewUserModal: NewUserModal = ({
               setOpen(false);
             });
           } else {
+            await create(data).then(() => {
+              setOpen(false);
+            });
           }
-          await create(data).then(() => {
-            setOpen(false);
-          });
         }}
         label={data.id ? "Update User" : "Create User"}
       />

@@ -1,20 +1,20 @@
 import React, { useContext, useState } from "react";
-import { DateManager } from "../components/DateManager";
 import { useCollection } from "../hooks";
 import { Collection } from "../models/collection";
 import { DocumentData } from "firebase/firestore";
+import dayjs, { Dayjs } from "dayjs";
 
 export enum CalendarView {
   Month = "Month",
-  Consecutive = "Consecutive",
+  Consecutive = "Planner",
   Rooms = "Rooms",
 }
 
 type CalendarProps = {
   view: CalendarView;
   setView: React.Dispatch<React.SetStateAction<CalendarView>>;
-  date: DateManager;
-  setDate: React.Dispatch<React.SetStateAction<DateManager>>;
+  date: Dayjs;
+  setDate: React.Dispatch<React.SetStateAction<Dayjs>>;
   bookingData: Partial<Booking>;
   bookings: DocumentData[];
   setBookingData: React.Dispatch<React.SetStateAction<Partial<Booking>>>;
@@ -25,17 +25,17 @@ type CalendarProps = {
 };
 
 const CalendarContext = React.createContext<CalendarProps>({
-  view: CalendarView.Month,
-  setView: () => { },
-  date: new DateManager(),
-  setDate: () => { },
+  view: CalendarView.Consecutive,
+  setView: () => {},
+  date: dayjs(),
+  setDate: () => {},
   bookings: [],
   bookingData: {},
-  setBookingData: () => { },
+  setBookingData: () => {},
   bookingModalOpen: false,
-  setBookingModalOpen: () => { },
+  setBookingModalOpen: () => {},
   hoveredBooking: "",
-  setHoveredBooking: () => { },
+  setHoveredBooking: () => {},
 });
 
 export const CalendarProvider = ({
@@ -43,8 +43,8 @@ export const CalendarProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [view, setView] = useState<CalendarView>(CalendarView.Month);
-  const [date, setDate] = useState(new DateManager());
+  const [view, setView] = useState<CalendarView>(CalendarView.Consecutive);
+  const [date, setDate] = useState(dayjs());
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [bookingData, setBookingData] = useState<Partial<Booking>>({});
   const [hoveredBooking, setHoveredBooking] = useState("");
