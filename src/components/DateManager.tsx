@@ -52,7 +52,7 @@ export class DateManager {
     }
   }
 
-  constructor(date: Date = new Date()) {
+  constructor(date: Date = new Date(new Date().setHours(16))) {
     this.year = date.getFullYear();
     this.month = date.getMonth();
     this.date = date.getDate();

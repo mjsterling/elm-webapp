@@ -6,7 +6,7 @@ import { DocumentData } from "firebase/firestore";
 
 export enum CalendarView {
   Month = "Month",
-  Consecutive = "Consecutive",
+  Consecutive = "Planner",
   Rooms = "Rooms",
 }
 
@@ -25,17 +25,17 @@ type CalendarProps = {
 };
 
 const CalendarContext = React.createContext<CalendarProps>({
-  view: CalendarView.Month,
-  setView: () => { },
+  view: CalendarView.Consecutive,
+  setView: () => {},
   date: new DateManager(),
-  setDate: () => { },
+  setDate: () => {},
   bookings: [],
   bookingData: {},
-  setBookingData: () => { },
+  setBookingData: () => {},
   bookingModalOpen: false,
-  setBookingModalOpen: () => { },
+  setBookingModalOpen: () => {},
   hoveredBooking: "",
-  setHoveredBooking: () => { },
+  setHoveredBooking: () => {},
 });
 
 export const CalendarProvider = ({
@@ -43,7 +43,7 @@ export const CalendarProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [view, setView] = useState<CalendarView>(CalendarView.Month);
+  const [view, setView] = useState<CalendarView>(CalendarView.Consecutive);
   const [date, setDate] = useState(new DateManager());
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [bookingData, setBookingData] = useState<Partial<Booking>>({});

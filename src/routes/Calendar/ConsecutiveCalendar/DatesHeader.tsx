@@ -23,7 +23,6 @@ export const DatesHeader = ({
         onClick={() => setDate(date.backOneDay())}
       />
       {dates.map((date, i) => {
-        console.log(new Date(date * 86.4e6).toLocaleDateString("en-AU"));
         return (
           <>
             <text

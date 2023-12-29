@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useCollection, useCrud } from "../../../hooks";
 import { Collection } from "../../../models/collection";
 import { useCalendarData } from "../../../providers/CalendarProvider";
@@ -28,7 +28,6 @@ export const ConsecutiveCalendar = () => {
   const dates = Array.from(new Array(numDays).keys()).map(
     (n) => n + viewStartDate + 1
   );
-  console.log(dates);
   const bookingsForDateRange = useMemo(
     () =>
       bookings.filter(
@@ -74,7 +73,7 @@ export const ConsecutiveCalendar = () => {
         className={clsx(
           "select-none max-h-full",
           bookingDrag.dragging
-            ? bookingDrag.movePx
+            ? bookingDrag.moveXPx
               ? "cursor-grabbing"
               : "cursor-ew-resize"
             : "cursor-default"
@@ -132,8 +131,12 @@ export const ConsecutiveCalendar = () => {
               )}
               onClick={() => {
                 setBookingData({
-                  startDate: new Date((dates[0] + (index % numDays)) * 86.4e6),
-                  endDate: new Date((dates[1] + (index % numDays)) * 86.4e6),
+                  startDate: new Date(
+                    (dates[0] + (index % (numDays - 1))) * 86.4e6
+                  ),
+                  endDate: new Date(
+                    (dates[0] + 1 + (index % (numDays - 1))) * 86.4e6
+                  ),
                   rooms: [Math.floor(index / (numDays - 1)) + 1],
                 });
                 setBookingModalOpen(true);
@@ -330,7 +333,7 @@ export const ConsecutiveCalendar = () => {
                           startPx: e.clientX,
                           end: 0,
                           endPx: 0,
-                          movePx: 0,
+                          moveXPx: 0,
                           svgStartPx: left,
                           svgEndPx: right,
                           cellWidthPx: (right - left) / numDays,
@@ -357,7 +360,7 @@ export const ConsecutiveCalendar = () => {
                           tableRef.current?.getBoundingClientRect();
                         setBookingDrag({
                           dragging: true,
-                          movePx: 0,
+                          moveXPx: 0,
                           booking: { ...booking },
                           start: 0,
                           startPx: 0,
@@ -373,7 +376,7 @@ export const ConsecutiveCalendar = () => {
                     <rect
                       className={clsx(
                         bookingDrag.dragging
-                          ? bookingDrag.movePx
+                          ? bookingDrag.moveXPx
                             ? "cursor-grabbing"
                             : "cursor-ew-resize"
                           : "cursor-grab"
@@ -384,7 +387,7 @@ export const ConsecutiveCalendar = () => {
                           tableRef.current?.getBoundingClientRect();
                         setBookingDrag({
                           dragging: true,
-                          movePx: e.clientX,
+                          moveXPx: e.clientX,
                           booking: { ...booking },
                           start: booking.startDateAsDays,
                           startPx: 0,
@@ -398,7 +401,7 @@ export const ConsecutiveCalendar = () => {
                       }}
                       onMouseUp={(e) => {
                         if (
-                          Math.abs(bookingDrag.movePx - e.clientX) < 5 &&
+                          Math.abs(bookingDrag.moveXPx - e.clientX) < 5 &&
                           !bookingDrag.hasMoved
                         ) {
                           resetBookingDrag();

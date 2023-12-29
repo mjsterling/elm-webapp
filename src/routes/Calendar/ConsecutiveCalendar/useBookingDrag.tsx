@@ -13,7 +13,8 @@ export const useBookingDrag = () => {
     booking: null,
     start: 0,
     startPx: -1,
-    movePx: 0,
+    moveXPx: 0,
+    moveYPx: 0,
     end: 0,
     endPx: -1,
     svgStartPx: 0,
@@ -29,7 +30,7 @@ export const useBookingDrag = () => {
     startPx: number;
     end: number;
     endPx: number;
-    movePx: number;
+    moveXPx: number;
     svgStartPx: number;
     svgEndPx: number;
     cellWidthPx: number;
@@ -45,7 +46,7 @@ export const useBookingDrag = () => {
     if (!bookingDrag.dragging) return;
 
     const absoluteMouseMoveDelta = Math.abs(
-      (bookingDrag.startPx || bookingDrag.endPx || bookingDrag.movePx) -
+      (bookingDrag.startPx || bookingDrag.endPx || bookingDrag.moveXPx) -
         e.clientX
     );
     if (absoluteMouseMoveDelta >= bookingDrag.cellWidthPx / 2) {
@@ -56,10 +57,10 @@ export const useBookingDrag = () => {
         };
       });
     }
-    if (bookingDrag.movePx) {
+    if (bookingDrag.moveXPx) {
       setBookingDrag((drag) => {
         const bookingDateDelta = Math.round(
-          (e.clientX - drag.movePx) / drag.cellWidthPx
+          (e.clientX - drag.moveXPx) / drag.cellWidthPx
         );
         return {
           ...drag,
@@ -99,7 +100,7 @@ export const useBookingDrag = () => {
   const handleContainerMouseUp = (e: React.MouseEvent<SVGSVGElement>) => {
     if (!bookingDrag.dragging) return;
     if (
-      bookingDrag.movePx &&
+      bookingDrag.moveXPx &&
       bookingDrag.start === bookingDrag.booking!.startDateAsDays
     )
       return resetBookingDrag();
@@ -115,7 +116,7 @@ export const useBookingDrag = () => {
       return resetBookingDrag();
 
     if (
-      bookingDrag.movePx &&
+      bookingDrag.moveXPx &&
       bookingDrag.start !== bookingDrag.booking!.startDateAsDays
     ) {
       update({

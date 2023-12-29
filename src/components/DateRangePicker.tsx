@@ -116,9 +116,14 @@ export const DateRangePicker: DateRangePicker = ({
     (new Date(date.year, date.month, 1).getDay() + date.daysIn(date.month)) / 7
   );
 
-  const monthStart = new Date(date.year, date.month, 1).getDay();
+  const monthStart = new Date(date.year, date.month, 1, 16).getDay();
 
-  const millisecondsOfMonthStart = new Date(date.year, date.month, 1).getTime();
+  const millisecondsOfMonthStart = new Date(
+    date.year,
+    date.month,
+    1,
+    16
+  ).getTime();
 
   const gridDates = Array.from(new Array(numRows * 7).keys()).map(
     (n) => new Date(millisecondsOfMonthStart + (n - monthStart) * 86.4e6)
