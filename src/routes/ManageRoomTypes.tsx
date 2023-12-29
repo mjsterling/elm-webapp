@@ -54,7 +54,6 @@ const ManageRoomTypes = () => {
     prices: "Prices",
     actions: "Actions",
   };
-  console.log(roomData);
 
   const BedsDisplay = ({
     beds_single,

@@ -3,6 +3,7 @@ import { DateManager } from "./DateManager";
 import clsx from "clsx";
 import { IconButton } from "./IconButton";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import { daysSinceEpoch } from "../utils/dateUtils";
 
 type DateRangePickerProps = {
   startDate: Date | undefined;
@@ -22,10 +23,8 @@ export const DateRangePicker: DateRangePicker = ({
   endDate,
   setDates,
 }) => {
-
-  const dayOfStartDate = Math.floor((startDate?.getTime() ?? 0) / 86.4e6);
-  const dayOfEndDate = Math.floor((endDate?.getTime() ?? 0) / 86.4e6);
-
+  const dayOfStartDate = daysSinceEpoch(startDate);
+  const dayOfEndDate = daysSinceEpoch(endDate);
   const DayCard = ({ currentDate }: { currentDate: Date }) => {
     const dayOfCurrentDate = Math.floor(currentDate.getTime() / 86.4e6);
     const isStartDate = dayOfStartDate === dayOfCurrentDate;
@@ -67,7 +66,7 @@ export const DateRangePicker: DateRangePicker = ({
             cx={25}
             cy={25}
             r={20}
-            fill="rgb(29 78 216)"
+            fill="#1d4ed8"
             className={clsx(
               "group-hover:opacity-100 transition-opacity",
               isStartDate || isEndDate ? "opacity-100" : "opacity-0"
@@ -83,7 +82,7 @@ export const DateRangePicker: DateRangePicker = ({
             alignmentBaseline="middle"
             fill={
               currentDate.getMonth() === date.month &&
-                currentDate.getDate() === date.date
+              currentDate.getDate() === date.date
                 ? "#00F"
                 : "#000"
             }

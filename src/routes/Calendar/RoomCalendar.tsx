@@ -30,7 +30,9 @@ export const RoomCalendar = () => {
         .sort((a, b) => a.roomNumber - b.roomNumber)
         .map((room) => {
           const todaysBookingsForThisRoom = todaysBookings
-            .filter((booking) => booking.room === room.roomNumber)
+            .filter((booking) =>
+              (booking.rooms ?? []).includes(room.roomNumber)
+            )
             .sort((a, b) => a.endDateAsDays - b.endDateAsDays);
           const [currentBooking, _] = todaysBookingsForThisRoom;
           return (

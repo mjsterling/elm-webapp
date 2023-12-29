@@ -51,7 +51,6 @@ export const BookingStatusDisplay = () => {
               status: forStatus,
               [statusFieldMap[forStatus]]: prevDateIfAny ?? new Date(),
             }).catch((e) => {
-              console.error(e);
               setBookingData({
                 ...bookingData,
                 status: prevStatus,

@@ -39,7 +39,6 @@ const ManageAddons = () => {
     price: "Price",
     actions: "Actions",
   };
-  console.log(addonData);
 
   return (
     <div className="w-full h-full flex flex-col gap-4 p-8 pb-24">
@@ -104,7 +103,6 @@ const ManageAddons = () => {
           options={["Flat", "Per person"]}
           value={addonData.type ?? ""}
           onSelect={(value) => {
-            console.log("value in onselect", value);
             setAddonData({
               ...addonData,
               type: value as "Flat" | "Per person",

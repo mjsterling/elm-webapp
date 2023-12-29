@@ -29,7 +29,6 @@ export const StyledDropdown: React.FC<StyledDropdownProps> = ({
   }, [value]);
 
   const selectOption = (option: string) => {
-    console.log("option in selectoption", option);
     onSelect(option);
     setDropdownOpen(false);
   };

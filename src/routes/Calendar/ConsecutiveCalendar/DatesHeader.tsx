@@ -11,7 +11,7 @@ export const DatesHeader = ({
   numDays: number;
 }) => {
   const { date, setDate } = useCalendarData();
-  const viewMidpoint = date.asDays;
+  const viewMidpoint = date.asDays + 1;
 
   return (
     <>
@@ -23,12 +23,11 @@ export const DatesHeader = ({
         onClick={() => setDate(date.backOneDay())}
       />
       {dates.map((date, i) => {
+        console.log(new Date(date * 86.4e6).toLocaleDateString("en-AU"));
         return (
           <>
             <text
-              onClick={() =>
-                setDate(new DateManager().fromDays(date + 11 / 24))
-              }
+              onClick={() => setDate(new DateManager().fromDays(date))}
               className="cursor-pointer"
               fontWeight={date === viewMidpoint ? 700 : 500}
               x={50 + 100 * i}

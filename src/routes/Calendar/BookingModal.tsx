@@ -19,6 +19,7 @@ import { StyledDropdown } from "../../components/StyledDropdown";
 import { useMemo } from "react";
 import clsx from "clsx";
 import { daysSinceEpoch } from "../../utils/dateUtils";
+import { BookingStatus } from "../../models/bookingStatus";
 
 export const BookingModal = () => {
   const {
@@ -44,8 +45,8 @@ export const BookingModal = () => {
   );
 
   const isRoomAvailableForDates = (room: Room) => {
-    const bookingsForRoom = bookings.filter(
-      (booking) => booking.room === room.roomNumber
+    const bookingsForRoom = bookings.filter((booking) =>
+      (booking.rooms ?? []).includes(room.roomNumber)
     );
     for (const booking of bookingsForRoom) {
       if (
@@ -59,7 +60,6 @@ export const BookingModal = () => {
   };
 
   const roomsWithAvailability = useMemo(() => {
-    console.log("recalculating availability");
     return [...sortedRooms].map((room) => ({
       ...(room as Room),
       available: isRoomAvailableForDates(room as Room),
@@ -74,9 +74,9 @@ export const BookingModal = () => {
         title={
           bookingData.id
             ? "Editing Booking for " +
-              bookingData.contactFirstName +
+              (bookingData.contactFirstName ?? "") +
               " " +
-              bookingData.contactLastName
+              (bookingData.contactLastName ?? "")
             : "New Booking"
         }
         className="flex flex-col gap-3"
@@ -84,9 +84,36 @@ export const BookingModal = () => {
         <div className="flex justify-center">
           <BookingStatusDisplay />
         </div>
+        <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
+          Customer Information
+        </h4>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <StyledInput
+            label="First Name"
+            value={bookingData.contactFirstName}
+            onChange={setFormData("contactFirstName")}
+          />
+          <StyledInput
+            label="Last Name"
+            value={bookingData.contactLastName}
+            onChange={setFormData("contactLastName")}
+          />
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <StyledInput
+            label="Contact Phone Number"
+            value={bookingData.contactPhone}
+            onChange={setFormData("contactPhone")}
+          />
+          <StyledInput
+            label="Contact Email Address"
+            value={bookingData.contactEmail}
+            onChange={setFormData("contactEmail")}
+          />
+        </div>
         {/* Room Select */}
         <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
-          Room
+          Rooms
         </h4>
         <div className="flex py-4 flex-wrap gap-3 justify-center items-center">
           {roomsWithAvailability.map((room) => (
@@ -94,16 +121,28 @@ export const BookingModal = () => {
               className={clsx(
                 "rounded-full h-10 w-10 transition-colors text-lg font-semibold",
                 room.available &&
-                  !(bookingData.room === room.roomNumber) &&
+                  !bookingData.rooms?.includes(room.roomNumber) &&
                   "border border-blue-700 text-blue-700 bg-white hover:bg-blue-700 hover:text-white",
                 !room.available &&
-                  !(bookingData.room === room.roomNumber) &&
+                  !bookingData.rooms?.includes(room.roomNumber) &&
                   "border border-gray-500 text-gray-500 bg-white",
-                bookingData.room === room.roomNumber && "bg-blue-700 text-white"
+                bookingData.rooms?.includes(room.roomNumber) &&
+                  "bg-blue-700 text-white"
               )}
-              onClick={() =>
-                setBookingData({ ...bookingData, room: room.roomNumber })
-              }
+              onClick={() => {
+                const selectedRooms = bookingData.rooms ?? [];
+                const roomIndex = selectedRooms.indexOf(room.roomNumber);
+                setBookingData((bookingData) => ({
+                  ...bookingData,
+                  rooms:
+                    roomIndex > -1
+                      ? [
+                          ...selectedRooms.slice(0, roomIndex),
+                          ...selectedRooms.slice(roomIndex + 1),
+                        ]
+                      : [...selectedRooms, room.roomNumber].sort(),
+                }));
+              }}
             >
               {room.roomNumber}
             </button>
@@ -127,33 +166,7 @@ export const BookingModal = () => {
             }}
           />
         </div>
-        <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
-          Customer Information
-        </h4>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <StyledInput
-            label="First Name"
-            value={bookingData.contactFirstName}
-            onChange={setFormData("contactFirstName")}
-          />
-          <StyledInput
-            label="Last Name"
-            value={bookingData.contactLastName}
-            onChange={setFormData("contactLastName")}
-          />
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <StyledInput
-            label="Contact Email Address"
-            value={bookingData.contactEmail}
-            onChange={setFormData("contactEmail")}
-          />
-          <StyledInput
-            label="Contact Phone Number"
-            value={bookingData.contactPhone}
-            onChange={setFormData("contactPhone")}
-          />
-        </div>
+
         <h4 className="w-full text-center font-semibold mt-4 pt-4 border-t border-t-gray-200">
           Booking Details
         </h4>
@@ -277,6 +290,8 @@ export const BookingModal = () => {
               } else {
                 await create({
                   ...bookingData,
+                  numAdults: bookingData.numAdults ?? 2,
+                  status: BookingStatus.received,
                   statusReceivedDate: new Date(),
                 }).then(() => {
                   setBookingData({});

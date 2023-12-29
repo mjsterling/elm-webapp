@@ -41,7 +41,6 @@ const Rooms = () => {
     amenities: "Amenities",
     actions: "Actions",
   };
-  console.log(roomData);
 
   return (
     <div className="w-full h-full flex flex-col gap-4 p-8 pb-24">

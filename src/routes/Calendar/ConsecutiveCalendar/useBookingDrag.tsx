@@ -2,8 +2,10 @@ import type { DocumentData } from "firebase/firestore";
 import { useState } from "react";
 import { Collection } from "../../../models/collection";
 import { useCrud } from "../../../hooks";
+import { useCalendarData } from "../../../providers/CalendarProvider";
 
 export const useBookingDrag = () => {
+  const { setHoveredBooking } = useCalendarData();
   const { update } = useCrud(Collection.bookings);
 
   const defaultBookingDrag = () => ({
@@ -36,6 +38,7 @@ export const useBookingDrag = () => {
 
   const resetBookingDrag = () => {
     setBookingDrag(defaultBookingDrag);
+    setHoveredBooking("");
   };
 
   const handleContainerMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
