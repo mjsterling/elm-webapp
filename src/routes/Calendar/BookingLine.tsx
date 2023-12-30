@@ -1,9 +1,9 @@
 import type { DocumentData } from "firebase/firestore";
 import { useCalendarData } from "../../providers/CalendarProvider";
-import { daysSinceEpoch } from "../../utils/dateUtils";
 import clsx from "clsx";
 import { statusColors } from "../../utils/statusColors";
 import { BookingStatus } from "../../models/bookingStatus";
+import dayjs from "dayjs";
 
 type BookingLineProps = {
   booking: DocumentData;
@@ -23,16 +23,17 @@ export const BookingLine: BookingLine = ({
     setBookingData,
     setBookingModalOpen,
   } = useCalendarData();
-  const currentDateAsDays = daysSinceEpoch(currentDate);
+  const _currentDate = dayjs(currentDate);
+  const startDate = dayjs(booking.startDate);
+  const endDate = dayjs(booking.endDate);
   const cellPosX = (cellIndex % 7) * 100;
   const cellPosY = Math.floor(cellIndex / 7) * 100;
 
-  const startDateAsDays = daysSinceEpoch(booking.startDate);
-  const endDateAsDays = daysSinceEpoch(booking.endDate);
-  const isStartDate = startDateAsDays === currentDateAsDays;
-  const isEndDate = endDateAsDays === currentDateAsDays;
+  const isStartDate = _currentDate.isSame(startDate, "day");
+  const isEndDate = _currentDate.isSame(endDate, "day");
   const isBetweenDate =
-    currentDateAsDays > startDateAsDays && currentDateAsDays < endDateAsDays;
+    _currentDate.isAfter(startDate.subtract(1, "day"), "day") &&
+    _currentDate.isBefore(endDate.add(1, "day"), "day");
 
   return (booking.rooms ?? []).map((roomNumber: number) => {
     const lineColor =

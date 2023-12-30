@@ -30,12 +30,6 @@ export const useCollection = (_collection: Collection) => {
             ) {
               const dateAsDate = new Date(record[_key].seconds * 1000);
               record[_key] = dateAsDate;
-              if (_key === "startDate") {
-                record.startDateAsDays = daysSinceEpoch(dateAsDate);
-              }
-              if (_key === "endDate") {
-                record.endDateAsDays = daysSinceEpoch(dateAsDate);
-              }
             }
           }
           _records.push(record);

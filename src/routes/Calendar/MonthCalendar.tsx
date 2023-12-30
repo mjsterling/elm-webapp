@@ -1,18 +1,15 @@
 import { useMemo } from "react";
 import { useCalendarData } from "../../providers/CalendarProvider";
 import { DayCard } from "./DayCard";
-import { DateManager } from "../../components";
 import { SvgChevronButton } from "../../components/SvgChevronButton";
+import dayjs from "dayjs";
 
 export const MonthCalendar = () => {
   const { date, setDate } = useCalendarData();
-  const numRows = Math.ceil(
-    (new Date(date.year, date.month, 1).getDay() + date.daysIn(date.month)) / 7
-  );
+  const monthStart = date.startOf("month").day();
+  const numRows = Math.ceil((monthStart + date.endOf("month").date()) / 7);
 
-  const monthStart = new Date(date.year, date.month, 1).getDay();
-
-  const millisecondsOfMonthStart = new Date(date.year, date.month, 1).getTime();
+  const millisecondsOfMonthStart = date.startOf("month").toDate().getTime();
 
   const gridDates = useMemo(
     () =>
@@ -33,27 +30,27 @@ export const MonthCalendar = () => {
           x={230}
           y={-82}
           direction="left"
-          onClick={() => setDate(date.backOneMonth())}
+          onClick={() => setDate(date.subtract(1, "month"))}
         />
 
         <text
           textAnchor="middle"
           alignmentBaseline="middle"
-          onClick={() => setDate(new DateManager())}
+          onClick={() => setDate(dayjs())}
           className="cursor-pointer select-none"
           x={355}
           y={-75}
           fontSize={26}
           fontWeight={500}
         >
-          {date.monthAsFullString} {date.year}
+          {date.format("MMM YY")}
         </text>
         <SvgChevronButton
           size={20}
           x={480}
           y={-82}
           direction="right"
-          onClick={() => setDate(date.forwardOneMonth())}
+          onClick={() => setDate(date.add(1, "month"))}
         />
         {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
           <text

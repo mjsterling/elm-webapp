@@ -4,6 +4,7 @@ import { Collection } from "../../models/collection";
 import { useCalendarData } from "../../providers/CalendarProvider";
 import clsx from "clsx";
 import { BookingStatus } from "../../models/bookingStatus";
+import dayjs from "dayjs";
 
 export const RoomCalendar = () => {
   const rooms = useCollection(Collection.rooms);
@@ -12,8 +13,8 @@ export const RoomCalendar = () => {
     () =>
       bookings.filter(
         (booking) =>
-          booking.startDateAsDays <= date.asDays &&
-          booking.endDateAsDays >= date.asDays
+          dayjs(booking.startDate).isBefore(date.add(1, "day")) &&
+          dayjs(booking.endDate).isAfter(date.subtract(1, "day"))
       ),
     [date, bookings]
   );
@@ -33,7 +34,7 @@ export const RoomCalendar = () => {
             .filter((booking) =>
               (booking.rooms ?? []).includes(room.roomNumber)
             )
-            .sort((a, b) => a.endDateAsDays - b.endDateAsDays);
+            .sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
           const [currentBooking] = todaysBookingsForThisRoom;
           return (
             <div
